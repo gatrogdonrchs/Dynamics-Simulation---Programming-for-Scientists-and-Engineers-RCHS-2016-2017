@@ -1,5 +1,3 @@
-require 'graphics/bmp/bmp'
-require 'graphics/jpeg/jpeg'
 require 'gl2'
 coinsert 'jgl2'
 
