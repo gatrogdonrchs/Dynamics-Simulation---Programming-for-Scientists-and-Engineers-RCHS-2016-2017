@@ -1,7 +1,0 @@
-Mohsin Haider
-
-I'm gonna work on collision detection, so I'll work on
-finding the time of collision between widgets. Circles should
-be easy, because you can just use the center and radius and it 
-will always work, but rectangles will be much harder to determine
-when they collide with another widget.

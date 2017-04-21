@@ -1,6 +1,0 @@
-I would like to be a part of a team doing these task:
-Detect time of collision between widgets
-Detect duration of  of collision
-Detect precise collision details
-Set new velocities after collision. 
-I would like to be involved with programming dealing with physics. 
