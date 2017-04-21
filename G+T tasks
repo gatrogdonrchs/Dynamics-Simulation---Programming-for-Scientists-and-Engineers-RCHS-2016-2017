@@ -1,0 +1,8 @@
+Graphics
+1. set up glellipse
+2. set up a velocity function
+3. set up a position function
+Timing
+1. set up sys_timer_z_
+2. set up wd 'timer i'
+3. cut frames when necessary (calls on collision detection)
