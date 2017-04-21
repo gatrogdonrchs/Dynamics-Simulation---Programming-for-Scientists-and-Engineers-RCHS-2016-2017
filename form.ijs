@@ -1,13 +1,22 @@
+require 'graphics/bmp/bmp'
+require 'graphics/jpeg/jpeg'
 require 'gl2'
 coinsert 'jgl2'
 
 CANVAS =: 0 : 0
 pc canvas;
-minwh 1200 900;cc canvasisi isidraw;
-bin z;
-bin z; 
-pas 6 6;
+minwh 1000 900;cc canvasisi isidraw;
+bin v;
+bin h;
+cc Start/Stop button;
+cc Pause button;
+cc Step button;
+cc Create_Widget button;
+bin sz;
+bin h;
 )
+
+
 
 NB. Execute the form
 canvas_run =: monad define
