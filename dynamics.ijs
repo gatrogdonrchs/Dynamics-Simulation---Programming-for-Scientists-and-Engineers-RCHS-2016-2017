@@ -44,6 +44,10 @@ setmass =: verb define
 amass =: y
 )
 
+setwh =: verb define
+wh =: y
+)
+
 setgraphrep =: verb define
 )
 
