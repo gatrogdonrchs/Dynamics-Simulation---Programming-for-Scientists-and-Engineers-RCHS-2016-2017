@@ -57,7 +57,7 @@ cocurrent 'disk'
 coinsert 'widget'
 
 create =: verb define
-create_widget_ y
+create_widget_ f. y
 )
 destroy =: verb define
 destroy_widget_ f. ''
