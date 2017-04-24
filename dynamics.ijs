@@ -12,9 +12,10 @@ NB. It has a graphical representation and a mathematical representation
 
 NB. Subclasses of widgets are disks, rectangles, etc.
 
-widgetlist =: 0$a:
+
 
 cocurrent 'widget'
+widgetlist =: 0$a:
 create =: verb define
 widgetlist =: widgetlist , coname''
 )
