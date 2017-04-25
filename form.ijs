@@ -8,15 +8,26 @@ pc canvas;
 minwh 1000 900;cc canvasisi isidraw;
 bin v;
 bin h;
-cc Start/Stop button;
-cc Pause button;
+cc ll button;set ll wh 20 20;
+cc ► button;set ► wh 20 20;
 cc Step button;
-cc Create_Widget button;
+cc Widgsel combolist;set Widgsel wh 140 22;
+set Widgsel items "" "Create Widget";
 bin sz;
 bin h;
 )
 
+CREATEWIDGET =: 0 : 0
+pc "Create Widget";
+minwh 20 20;cc canvasisi isidraw;
+bin v;
+bin h;
+)
 
+canvasisi_Widgsel_select =: monad define
+wd CREATEWIDGET
+wd 'pshow'
+)
 
 NB. Execute the form
 canvas_run =: monad define
