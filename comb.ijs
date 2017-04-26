@@ -1,3 +1,6 @@
+NB. Graphics+timing combined .ijs
+NB. this has a skeleton of a ui just so that we can work with it, will update as ui gets updated
+
 require 'gl2'
 coinsert 'jgl2'
 
