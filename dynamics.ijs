@@ -11,22 +11,28 @@ NB. A widget represents a physical object
 NB. It has a graphical representation and a mathematical representation
 
 NB. Subclasses of widgets are disks, rectangles, etc.
-
-
-
 cocurrent 'widget'
+
 widgetlist =: 0$a:
+
 create =: verb define
-widgetlist =: widgetlist , coname''
+widgetlist_widget_ =: widgetlist_widget_ , coname''
 )
 destroy =: verb define
-widgetlist =: widgetlist -. coname''
+widgetlist_widget_ =: widgetlist_widget_ -. coname''
 codestroy''
 )
 
+getwidgetlist =: verb define
+widgetlist
+)
 NB. Methods common to all widgets
 setposition =: verb define
 position =: y
+)
+
+setwh =: verb define
+wh =: y
 )
 
 setvelocity =: verb define
@@ -43,10 +49,6 @@ avelocity =: y
 
 setmass =: verb define
 amass =: y
-)
-
-setwh =: verb define
-wh =: y
 )
 
 setgraphrep =: verb define
