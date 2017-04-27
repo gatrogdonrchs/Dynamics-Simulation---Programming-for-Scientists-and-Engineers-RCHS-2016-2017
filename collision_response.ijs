@@ -27,22 +27,10 @@ setvelocity__disk2 v2p
 )
 
 
-disk_rect =: verb define
+disk_rect =: dyad define
 NB. Input: 
 NB. x is point of collision, 
 NB. y is the two colliding locales
 
-
-)
-
-
-Notes =: noun define
-locale changes when:
-     current 'locname' is executed
-     a locative is executed (a verb is executed)
-          (some name)_base_ - this is direct, base is not a name
-          (name)__obj   - this is indirect - obj is a name
-
-http://www.real-world-physics-problems.com/physics-of-billiards.html
 
 )
