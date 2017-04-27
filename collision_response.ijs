@@ -34,3 +34,4 @@ NB. y is the two colliding locales
 
 
 )
+NB. http://ericleong.me/research/circle-circle/#dynamic-static-circle-collision-response
