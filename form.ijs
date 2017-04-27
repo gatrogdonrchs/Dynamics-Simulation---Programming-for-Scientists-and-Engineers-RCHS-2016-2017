@@ -46,6 +46,14 @@ getposition =: verb define
 position
 )
 
+setsize =: verb define
+size =: y
+)
+
+getsize =: verb define
+size
+)
+
 setrotation =: verb define
 rotation =: y
 )
@@ -90,7 +98,7 @@ bin h;
 )
 
 CREATEWIDGET =: 0 : 0
-pc build;
+pc builder;
 cc Widget static;
 cc newname edit;set newname wh 80 20;
 bin sz;
@@ -121,14 +129,15 @@ wd 'pshow'
 end.
 )
 
-build_Create_button =: monad define
+builder_Create_button =: monad define
 newname =: '' conew 'disk'
 setposition__newname (". newposx),(". newposy)
 setvelocity__newname (". newvelx),(". newvely)
+setsize__newname (". newsizex),(". newsizey)
 glsel canvasisi
 glbrush glrgb 3#196
 glpen 2 0 [  glrgb 3#128
-glellipse (getposition__newname''),(100 100)
+glellipse (getposition__newname''),(getsize__newname'')
 glpaintx''
 wd'pclose;'
 )
@@ -149,12 +158,13 @@ canvas_cancel =: canvas_close
 timerframe =: verb define
 cp =: getposition__newname''
 cv =: getvelocity__newname''
+cs =: getsize__newname''
 setposition__newname (cp + cv)
 glsel canvasisi
 glclear''
 glbrush glrgb 3#196
 glpen 2 0 [  glrgb 3#128
-glellipse (getposition__newname''),(100,100)
+glellipse (getposition__newname''),cs
 glpaintx''
 )
 
