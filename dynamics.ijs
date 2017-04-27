@@ -51,6 +51,30 @@ setmass =: verb define
 amass =: y
 )
 
+getposition=: verb define
+position
+)
+
+getvelocity =: verb define
+velocity
+)
+
+getwh =: verb define
+wh
+)
+
+getmass =: verb define
+mass
+)
+
+getrotation =: verb define
+rotation
+)
+
+getavelocity =: verb define 
+avelocity
+)
+
 setgraphrep =: verb define
 )
 
@@ -64,6 +88,15 @@ create_widget_ f. y
 destroy =: verb define
 destroy_widget_ f. ''
 )
+
+setradius =: verb define
+radius =: y
+)
+
+getradius =: verb define
+radius
+)
+
 
 NB. Run a timestep of length y
 NB. Update positions & velocities
