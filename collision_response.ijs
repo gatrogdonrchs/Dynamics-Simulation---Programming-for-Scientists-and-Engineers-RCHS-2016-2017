@@ -3,6 +3,7 @@
 
 
 disk_disk =: dyad define
+NB. Dummy code
 NB. Input: 
 NB. x is point of collision, 
 NB. y is the two colliding locales
@@ -50,6 +51,7 @@ p1y =: {: p1
 p2x =: {. p2
 p2y =: {: p2
 NB. http://ericleong.me/research/circle-circle/#dynamic-static-circle-collision-response
+NB. I am a bit worried about the calculation, because it does not take into account the point of impact
 NB. distance between centers
 d =: %: +/ *:( p1x -p2x) , (p1y - p2y)
 NB. "norm of the vector from the point of collision for the first circle and the point of collision of the second circle"
