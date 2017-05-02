@@ -77,4 +77,6 @@ NB. y is the two colliding locales
 
 
 )
+NB. https://phet.colorado.edu/en/simulation/collision-lab
+NB. http://www.metanetsoftware.com/2016/n-tutorial-a-collision-detection-and-response#section3
 NB. http://ericleong.me/research/circle-circle/#dynamic-static-circle-collision-response
