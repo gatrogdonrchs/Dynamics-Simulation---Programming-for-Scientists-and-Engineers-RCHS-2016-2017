@@ -1,6 +1,3 @@
-NB. Graphics+timing combined .ijs
-NB. this has a skeleton of a ui just so that we can work with it, will update as ui gets updated
-
 require 'gl2'
 coinsert 'jgl2'
 
@@ -55,17 +52,22 @@ NB. Subclasses of widgets are disks, rectangles, etc.
 
 
 cocurrent 'widget'
+
 widgetlist =: 0$a:
 
 create =: verb define
-widgetlist =: widgetlist , coname''
+widgetlist_widget_ =: widgetlist_widget_ , coname''
 )
+
 destroy =: verb define
-widgetlist =: widgetlist -. coname''
+widgetlist_widget_ =: widgetlist_widget_ -. coname''
 codestroy''
 )
 
 NB. Methods common to all widgets
+getwidget =: verb define
+y{(widgetlist_widget)
+)
 
 setvelocity =: verb define
 velocity =: y
@@ -102,8 +104,10 @@ NB. ******************** disks ******************
 cocurrent 'disk'
 coinsert 'widget'
 
+
+
 create =: verb define
-create_widget_ y
+create_widget_ f. y
 )
 destroy =: verb define
 destroy_widget_ f. ''
@@ -114,25 +118,29 @@ require 'gl2'
 coinsert 'jgl2'
 
 canvas_createball_button =: verb define
-ball1 =: '' conew 'disk'
-setposition__ball1 (". xcord),(". ycord)
-setvelocity__ball1 (". xvelo),(". yvelo)
+newball =. '' conew 'disk'
+setposition__newball (". xcord),(". ycord)
+setvelocity__newball ((". xvelo)%50),((". yvelo)%50)
 glsel canvasisi
 glbrush glrgb 3#196
 glpen 2 0 [  glrgb 3#128
-glellipse (getposition__ball1''),(100 100)
+glellipse (getposition_widget_ inlocales widgetlist_widget_),(100 100)
 glpaintx''
 )
 
+canvas_destroyball_button =: verb define
+destroy_widget_ inlocales widgetlist_widget_
+)
+
 timerframe =: verb define
-cp =: getposition__ball1''
-cv =: getvelocity__ball1''
-setposition__ball1 (cp + cv)
+cp =: getposition_widget_ inlocales (widgetlist_widget_)
+cv =: getvelocity_widget_ inlocales (widgetlist_widget_)
+setposition (cp + cv) inlocales widgetlist_widget_
 glsel canvasisi
 glclear''
 glbrush glrgb 3#196
 glpen 2 0 [  glrgb 3#128
-glellipse (getposition__ball1''),(100,100)
+glellipse ((getposition'' inlocales widgetlist_widget_),(100,100)
 glpaintx''
 )
 
@@ -150,7 +158,7 @@ end.
 
 sys_timer_z_ =: sys_timer_base_
 canvas_start_button =: verb define
-wd 'timer 200'
+wd 'timer 20'
 )
 
 canvas_stop_button =: verb define
