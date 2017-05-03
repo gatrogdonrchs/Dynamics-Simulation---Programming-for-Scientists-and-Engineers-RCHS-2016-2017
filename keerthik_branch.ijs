@@ -1,8 +1,12 @@
+NB. The verb "require" loads a script, and in this case it loads the 'gl2' script that contains useful graphics verbs
+NB. To view the gl2 script, one can execute (open 'gl2') in the ijx window
 require 'gl2'
+NB. The current locale, which can be viewed by executing (coname''), is the 'base' locale
+NB. Each locale has a path, which can be viewed by executing (copath'localename')
+NB. The coinsert verb inserts a new locale, the 
 coinsert 'jgl2'
 
 	
-
 CANVAS =: 0 : 0
 pc canvas;
 minwh 1200 900;cc canvasisi isidraw;
