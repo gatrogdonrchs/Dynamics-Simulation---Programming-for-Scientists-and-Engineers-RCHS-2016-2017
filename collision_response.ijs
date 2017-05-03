@@ -71,12 +71,24 @@ setvelocity__disk2 v2p
 
 
 disk_rect =: dyad define
+
+
+
 NB. Input: 
 NB. x is point of collision, 
 NB. y is the two colliding locales
 
+)
+
+disk_wall =: monad define
+NB. input is disk locale, wall locale
+
+NB. duration of collision is going to be the time to compress a film that is 1% of the radius, times two
+NB. (2%) * r = deltat
+
 
 )
+
 NB. https://phet.colorado.edu/en/simulation/collision-lab
 NB. http://www.metanetsoftware.com/2016/n-tutorial-a-collision-detection-and-response#section3
 NB. http://ericleong.me/research/circle-circle/#dynamic-static-circle-collision-response
