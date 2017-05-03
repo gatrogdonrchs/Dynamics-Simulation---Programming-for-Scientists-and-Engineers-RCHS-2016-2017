@@ -117,14 +117,35 @@ cocurrent 'base'
 require 'gl2'
 coinsert 'jgl2'
 
+inlocalesc =: 2 : 0
+cocurrent =. 18!:4
+i =. 18!:5 ''
+for_l. n do.
+  NB.?lintonly l =. <''
+  cocurrent l
+  u l_index{y
+end.
+cocurrent i
+''
+:
+cocurrent =. 18!:4
+i =. 18!:5 ''
+for_l. n do.
+  NB.?lintonly l =. <''
+  cocurrent l
+  x u l_index{y
+end.
+cocurrent i
+''
+)
 canvas_createball_button =: verb define
-newball =. '' conew 'disk'
+newball =: '' conew 'disk'
 setposition__newball (". xcord),(". ycord)
 setvelocity__newball ((". xvelo)%50),((". yvelo)%50)
 glsel canvasisi
-glbrush glrgb 3#196
-glpen 2 0 [  glrgb 3#128
-glellipse (getposition_widget_ inlocales widgetlist_widget_),(100 100)
+NB. glbrush glrgb 3#196
+NB. glpen 2 0 [  glrgb 3#128
+glellipse (getposition__newball''),(100 100)
 glpaintx''
 )
 
@@ -133,14 +154,12 @@ destroy_widget_ inlocales widgetlist_widget_
 )
 
 timerframe =: verb define
-cp =: getposition_widget_ inlocales (widgetlist_widget_)
-cv =: getvelocity_widget_ inlocales (widgetlist_widget_)
-setposition (cp + cv) inlocales widgetlist_widget_
+(setposition_widget_ inlocalesc widgetlist_widget_) ((getposition_widget_ inlocalesc (widgetlist_widget_)) + (getvelocity_widget_ inlocalesc (widgetlist_widget_)))
 glsel canvasisi
 glclear''
 glbrush glrgb 3#196
 glpen 2 0 [  glrgb 3#128
-glellipse ((getposition'' inlocales widgetlist_widget_),(100,100)
+glellipse ((getposition_widget_ inlocalesc widgetlist_widget_),(100,100))
 glpaintx''
 )
 
@@ -148,12 +167,15 @@ NB. Run a timestep of length y
 NB. Update positions & velocities
 NB. runstep =: verb define
 sys_timer =: verb define
-try.
-timerframe''
-catch.
-smoutput 'error in systimer'
-wd 'timer 0'
-end.
+cp =: getposition_widget_ inlocalesc (widgetlist_widget_)
+cv =: getvelocity_widget_ inlocalesc (widgetlist_widget_)
+(setposition inlocalesc widgetlist_widget_) (cp+cv)
+glsel canvasisi
+glclear''
+glbrush glrgb 3#196
+glpen 2 0 [  glrgb 3#128
+glellipse ((getposition_widget_ inlocalesc widgetlist_widget_),(100,100))
+glpaintx''
 )
 
 sys_timer_z_ =: sys_timer_base_
@@ -167,5 +189,3 @@ wd 'timer 0'
 
 NB. When we load this file, create the form if it doesn't exist
 wd :: canvas_run 'psel canvas'
-
-
