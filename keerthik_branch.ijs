@@ -1,12 +1,8 @@
-NB. The verb "require" loads a script, and in this case it loads the 'gl2' script that contains useful graphics verbs
-NB. To view the gl2 script, one can execute (open 'gl2') in the ijx window
 require 'gl2'
-NB. The current locale, which can be viewed by executing (coname''), is the 'base' locale
-NB. Each locale has a path, which can be viewed by executing (copath'localename')
-NB. The coinsert verb inserts a new locale, the 
 coinsert 'jgl2'
 
 	
+
 CANVAS =: 0 : 0
 pc canvas;
 minwh 1200 900;cc canvasisi isidraw;
@@ -142,6 +138,36 @@ end.
 cocurrent i
 ''
 )
+
+NB. Execute u in locales n, returning list of results
+inlocalesv =: 2 : 0
+if. 0=#n do. '' return. end.
+cocurrent =. 18!:4
+i =. 18!:5 ''
+cocurrent {. n
+res =. ,: u y
+for_l. }.n do.
+  NB.?lintonly l =. <''
+  cocurrent l
+  res =. res , u y
+end.
+cocurrent i
+res
+:
+if. 0=#n do. '' return. end.
+cocurrent =. 18!:4
+i =. 18!:5 ''
+cocurrent {. n
+res =. ,: x u y
+for_l. }.n do.
+  NB.?lintonly l =. <''
+  cocurrent l
+  res =. res , x u y
+end.
+cocurrent i
+res
+)
+
 canvas_createball_button =: verb define
 newball =: '' conew 'disk'
 setposition__newball (". xcord),(". ycord)
@@ -157,28 +183,19 @@ canvas_destroyball_button =: verb define
 destroy_widget_ inlocales widgetlist_widget_
 )
 
-timerframe =: verb define
-(setposition_widget_ inlocalesc widgetlist_widget_) ((getposition_widget_ inlocalesc (widgetlist_widget_)) + (getvelocity_widget_ inlocalesc (widgetlist_widget_)))
-glsel canvasisi
-glclear''
-glbrush glrgb 3#196
-glpen 2 0 [  glrgb 3#128
-glellipse ((getposition_widget_ inlocalesc widgetlist_widget_),(100,100))
-glpaintx''
-)
-
 NB. Run a timestep of length y
 NB. Update positions & velocities
 NB. runstep =: verb define
+NB. set up a try/catch at some point
 sys_timer =: verb define
-cp =: getposition_widget_ inlocalesc (widgetlist_widget_)
-cv =: getvelocity_widget_ inlocalesc (widgetlist_widget_)
-(setposition inlocalesc widgetlist_widget_) (cp+cv)
+cp =: getposition_widget_ inlocalesv (widgetlist_widget_)''
+cv =: getvelocity_widget_ inlocalesv (widgetlist_widget_)''
+setposition_widget_ inlocalesc widgetlist_widget_ (cp+cv)
 glsel canvasisi
 glclear''
 glbrush glrgb 3#196
 glpen 2 0 [  glrgb 3#128
-glellipse ((getposition_widget_ inlocalesc widgetlist_widget_),(100,100))
+glellipse ((getposition_widget_ inlocalesv widgetlist_widget_''),(100,100))
 glpaintx''
 )
 
