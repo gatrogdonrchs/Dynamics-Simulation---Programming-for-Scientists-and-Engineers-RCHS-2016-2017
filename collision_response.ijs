@@ -88,7 +88,11 @@ NB. (2%) * r = deltat
 disk =: {. y
 wall =: {: y
 
-r =: getradius__disk ''
+NB. rubber on dry concrete is used for the coefficient.  Can be changed later, maybe as property of the wall/ball
+coF =: 0.68
+
+R =: getradius__disk ''
+Md =: getmass__disk ''
 V =: getvelocity__disk ''
 Rotd =: getrotation__disk ''
 Rotw =: getrotation__wall ''
@@ -101,7 +105,23 @@ Vy =: {: V
 dD =: 0.02 * R
 dT =: dD % Vy
 
+NB. average normal force calculation:
+NB. delta P divided by delta T, or:
+Fn =:  dT %~ (2 * Md * Vy)
+NB. this is also the normal force
 
+NB. energy before collision % (1/2 * mass).  The mass cancels out of the before and after energies, so it is not used, as does the 1/2
+bEnergy =: %: +/ (Vx,Vy) ^2
+
+NB. Moment of inertia:
+I =: 0.5 * Md * (R^2)
+
+NB. torque calculation:
+Torque =: Fn * coF * R
+
+aV2 =: I %~ torque * dT + (I * aV)
+
+NB. final angular velocity calculation
 
 )
 
