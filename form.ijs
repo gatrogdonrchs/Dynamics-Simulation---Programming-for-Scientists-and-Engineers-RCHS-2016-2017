@@ -1,97 +1,6 @@
 require 'gl2'
 coinsert 'jgl2'
 
-NB. Dynamics simulation
-
-NB. Calculate length of next time step
-NB. For each pair of objects, find out how long till they collide
-NB. Result is time to next collision
-calctimestep =: verb define
-)
-
-NB. Widgets
-NB. A widget represents a physical object
-NB. It has a graphical representation and a mathematical representation
-
-NB. Subclasses of widgets are disks, rectangles, etc.
-
-cocurrent 'widget'
-widgetlist =: 0$a:
-
-create =: verb define
-widgetlist_widget_ =: widgetlist_widget_ , coname''
-name =: >y
-)
-
-destroy =: verb define
-widgetlist_widget_ =: widgetlist_widget_ -. coname''
-codestroy''
-)
-
-NB. Methods common to all widgets
-setname =: verb define
-name =: y
-)
-
-getname =: verb define
-name
-)
-
-setvelocity =: verb define
-velocity =: y
-)
-
-getvelocity =: verb define
-velocity
-)
-
-setposition =: verb define
-position =: y
-)
-
-getposition =: verb define
-position
-)
-
-setsize =: verb define
-size =: y
-)
-
-getsize =: verb define
-size
-)
-
-setrotation =: verb define
-rotation =: y
-)
-
-setavelocity =: verb define
-avelocity =: y
-)
-
-setmass =: verb define
-amass =: y
-)
-
-setgraphrep =: verb define
-)
-
-cocurrent 'disk'
-coinsert 'widget'
-
-create =: verb define
-create_widget_ f. (1{y)
-size =: 0 1 { (>0{y)
-position =: 2 3 { (>0{y)
-velocity =: 4 5 { (>0{y)
-)
-
-destroy =: verb define
-destroy_widget_ f. ''
-)
-
-cocurrent 'base'
-
 NB._____________FORM_GOODIEs______________
 CANVAS =: 0 : 0
 pc canvas;
@@ -170,9 +79,9 @@ wd 'pclose;'
 builder_cancel =: builder_close
 
 timerframe =: verb define
-cp =. getposition__widget''
-cv =. getvelocity__widget''
-cs =. getsize__widget''
+cp =. getposition__w''
+cv =. getvelocity__w''
+cs =. getsize__w''
 setposition__w (cp + cv)
 glsel canvasisi
 glclear''
