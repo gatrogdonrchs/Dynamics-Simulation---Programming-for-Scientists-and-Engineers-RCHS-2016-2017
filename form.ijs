@@ -15,20 +15,27 @@ NB. It has a graphical representation and a mathematical representation
 
 NB. Subclasses of widgets are disks, rectangles, etc.
 
-
 cocurrent 'widget'
 widgetlist =: 0$a:
 
 create =: verb define
-widgetlist =: widgetlist , coname''
+widgetlist_widget_ =: widgetlist_widget_ , coname''
+name =: >y
 )
 
 destroy =: verb define
-widgetlist =: widgetlist -. coname''
+widgetlist_widget_ =: widgetlist_widget_ -. coname''
 codestroy''
 )
 
 NB. Methods common to all widgets
+setname =: verb define
+name =: y
+)
+
+getname =: verb define
+name
+)
 
 setvelocity =: verb define
 velocity =: y
@@ -73,7 +80,10 @@ cocurrent 'disk'
 coinsert 'widget'
 
 create =: verb define
-create_widget_ y
+create_widget_ f. (1{y)
+size =: 0 1 { (>0{y)
+position =: 2 3 { (>0{y)
+velocity =: 4 5 { (>0{y)
 )
 
 destroy =: verb define
@@ -99,7 +109,7 @@ bin h;
 
 CREATEWIDGET =: 0 : 0
 pc builder;
-cc Widget static;
+cc Name static;
 cc newname edit;set newname wh 80 20;
 bin sz;
 bin h;
@@ -118,7 +128,7 @@ cc newvelx edit;set newvelx wh 20 20;
 cc newvely edit;set newvely wh 20 20;
 bin sz;
 bin h;
-cc Create button;set Create wh 40 20;
+cc Create button;set Create wh 50 20;
 )
 
 canvas_widgsel_select =: monad define
@@ -130,14 +140,12 @@ end.
 )
 
 builder_Create_button =: monad define
-newname =: '' conew 'disk'
-setposition__newname (". newposx),(". newposy)
-setvelocity__newname (". newvelx),(". newvely)
-setsize__newname (". newsizex),(". newsizey)
+vars =: ((". newsizex),(". newsizey),(". newposx),(". newposy),(". newvelx),(". newvely));(newname)
+w =: vars conew 'disk'
 glsel canvasisi
 glbrush glrgb 3#196
 glpen 2 0 [  glrgb 3#128
-glellipse (getposition__newname''),(getsize__newname'')
+glellipse (getposition__w''),(getsize__w'')
 glpaintx''
 wd'pclose;'
 )
@@ -155,16 +163,22 @@ wd'pclose;'
 
 canvas_cancel =: canvas_close
 
+builder_close =: monad define
+wd 'pclose;'
+)
+
+builder_cancel =: builder_close
+
 timerframe =: verb define
-cp =: getposition__newname''
-cv =: getvelocity__newname''
-cs =: getsize__newname''
-setposition__newname (cp + cv)
+cp =. getposition__widget''
+cv =. getvelocity__widget''
+cs =. getsize__widget''
+setposition__w (cp + cv)
 glsel canvasisi
 glclear''
 glbrush glrgb 3#196
 glpen 2 0 [  glrgb 3#128
-glellipse (getposition__newname''),cs
+glellipse (getposition__w''),cs
 glpaintx''
 )
 
@@ -183,7 +197,7 @@ end.
 sys_timer_z_ =: sys_timer_base_
 
 canvas_start_button =: verb define
-wd 'timer 200'
+wd 'timer 60'
 )
 
 canvas_ll_button =: verb define
