@@ -85,6 +85,22 @@ NB. input is disk locale, wall locale
 
 NB. duration of collision is going to be the time to compress a film that is 1% of the radius, times two
 NB. (2%) * r = deltat
+disk =: {. y
+wall =: {: y
+
+r =: getradius__disk ''
+V =: getvelocity__disk ''
+Rotd =: getrotation__disk ''
+Rotw =: getrotation__wall ''
+aVd =: getrotation__disk ''
+NB. This will be changed with coordinate rotations that Isaac will be doing.
+NB. I am currently writing this for a collision with the groud, and will add Isaac's code in later
+Vx =: {. V
+Vy =: {: V
+
+dD =: 0.02 * R
+dT =: dD % Vy
+
 
 
 )
