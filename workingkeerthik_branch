@@ -67,7 +67,7 @@ codestroy''
 
 NB. Methods common to all widgets
 getwidget =: verb define
-y{(widgetlist_widget)
+y{(widgetlist_widget_)
 )
 
 setvelocity =: verb define
@@ -181,7 +181,9 @@ glpaintx''
 )
 
 canvas_destroyallballs_button =: verb define
-destroy inlocales widgetlist_widget_
+destroy inlocalesv widgetlist_widget_''
+glsel canvasisi
+glclear''
 )
 
 NB. Run a timestep of length y
@@ -192,6 +194,7 @@ sys_timer =: verb define
 cp =: getposition inlocalesv (widgetlist_widget_)''
 cv =: getvelocity inlocalesv (widgetlist_widget_)''
 setposition inlocalesc widgetlist_widget_ (cp+cv)
+try.
 glsel canvasisi
 glclear''
 glbrush glrgb 3#196
@@ -201,6 +204,10 @@ pos =: (<:objnum){(getposition inlocalesv widgetlist_widget_'')
 glellipse pos,(100,100)
 end.
 glpaintx''
+catch.
+smoutput 'gl error'
+wd 'timer 0'
+end.
 )
 
 sys_timer_z_ =: sys_timer_base_
