@@ -1,6 +1,97 @@
 require 'gl2'
 coinsert 'jgl2'
 
+NB. Dynamics simulation
+
+NB. Calculate length of next time step
+NB. For each pair of objects, find out how long till they collide
+NB. Result is time to next collision
+calctimestep =: verb define
+)
+
+NB. Widgets
+NB. A widget represents a physical object
+NB. It has a graphical representation and a mathematical representation
+
+NB. Subclasses of widgets are disks, rectangles, etc.
+
+cocurrent 'widget'
+widgetlist =: 0$a:
+
+create =: verb define
+widgetlist_widget_ =: widgetlist_widget_ , coname''
+)
+
+destroy =: verb define
+widgetlist_widget_ =: widgetlist_widget_ -. coname''
+codestroy''
+)
+
+NB. Methods common to all widgets
+setname =: verb define
+name =: y
+)
+
+getname =: verb define
+name
+)
+
+setvelocity =: verb define
+velocity =: y
+)
+
+getvelocity =: verb define
+velocity
+)
+
+setposition =: verb define
+position =: y
+)
+
+getposition =: verb define
+position
+)
+
+setsize =: verb define
+size =: y
+)
+
+getsize =: verb define
+size
+)
+
+setrotation =: verb define
+rotation =: y
+)
+
+setavelocity =: verb define
+avelocity =: y
+)
+
+setmass =: verb define
+amass =: y
+)
+
+setgraphrep =: verb define
+)
+
+cocurrent 'disk'
+coinsert 'widget'
+
+create =: verb define
+create_widget_ f. (1{y)
+name =: > 6 { (>0{y)
+size =: > 0 1 { (>0{y)
+position =: > 2 3 { (>0{y)
+velocity =: > 4 5 { (>0{y)
+)
+
+destroy =: verb define
+destroy_widget_ f. ''
+)
+
+cocurrent 'base'
+
 NB._____________FORM_GOODIEs______________
 CANVAS =: 0 : 0
 pc canvas;
@@ -23,18 +114,24 @@ cc newname edit;set newname wh 80 20;
 bin sz;
 bin h;
 cc Size static;
-cc newsizex edit;set newsizex wh 20 20;
-cc newsizey edit;set newsizey wh 20 20;
+cc "x:" static;
+cc newsizex edit;set newsizex wh 40 20;
+cc "y:" static;
+cc newsizey edit;set newsizey wh 40 20;
 bin sz;
 bin h;
 cc Position static;
-cc newposx edit;set newposx wh 20 20;
-cc newposy edit;set newposy wh 20 20;
+cc "x:" static;
+cc newposx edit;set newposx wh 40 20;
+cc "y:" static;
+cc newposy edit;set newposy wh 40 20;
 bin sz;
 bin h;
 cc Velocity static;
-cc newvelx edit;set newvelx wh 20 20;
-cc newvely edit;set newvely wh 20 20;
+cc "x:" static;
+cc newvelx edit;set newvelx wh 40 20;
+cc "y:" static;
+cc newvely edit;set newvely wh 40 20;
 bin sz;
 bin h;
 cc Create button;set Create wh 50 20;
@@ -48,17 +145,20 @@ wd 'pshow'
 end.
 )
 
+widgettable =: 0$a: 
+
 builder_Create_button =: monad define
-vars =: ((". newsizex),(". newsizey),(". newposx),(". newposy),(". newvelx),(". newvely));(newname)
-w =: vars conew 'disk'
+vars =: ((". newsizex);(". newsizey);(". newposx);(". newposy);(". newvelx);(". newvely);(newname));''
+temp =: vars conew 'disk'
+newinfo =: <(getname__temp '');(getsize__temp '');(getposition__temp'');(getvelocity__temp '')
+widgettable =: widgettable , newinfo
 glsel canvasisi
 glbrush glrgb 3#196
 glpen 2 0 [  glrgb 3#128
-glellipse (getposition__w''),(getsize__w'')
+glellipse (getposition__temp''),(getsize__temp'')
 glpaintx''
 wd'pclose;'
 )
-
 NB. Execute the form
 canvas_run =: monad define
 wd CANVAS
@@ -77,19 +177,6 @@ wd 'pclose;'
 )
 
 builder_cancel =: builder_close
-
-timerframe =: verb define
-cp =. getposition__w''
-cv =. getvelocity__w''
-cs =. getsize__w''
-setposition__w (cp + cv)
-glsel canvasisi
-glclear''
-glbrush glrgb 3#196
-glpen 2 0 [  glrgb 3#128
-glellipse (getposition__w''),cs
-glpaintx''
-)
 
 NB. Run a timestep of length y
 NB. Update positions & velocities
