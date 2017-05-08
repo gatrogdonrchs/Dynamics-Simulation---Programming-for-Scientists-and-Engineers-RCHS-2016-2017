@@ -167,7 +167,7 @@ NB. (velocityx + velocity at edge due to rotation)
 Torque =: Fn * coF * R * (* (Vx + R*aVd)) 
 
 NB. final angular velocity calculation
-aV2 =: I %~ (torque * dT) + (I * aVd)
+aV2 =: I %~ (Torque * dT) + (I * aVd)
 
 NB. end of class notes: 
 NB. now we need to subtract the new rotational energy from the initial kinetic energy, and find the new kinetic energy
