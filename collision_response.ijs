@@ -68,6 +68,9 @@ v2p =: v2 - n * p * m2
 setvelocity__disk1 v1p
 setvelocity__disk2 v2p
 )
+
+
+
 disk_rect =: monad define
 
 velocity =: getvelocity__disk1 ''
@@ -105,8 +108,8 @@ NB. (2%) * r = deltat
 disk =: {. y
 wall =: {: y
 
-NB. rubber on dry concrete is used for the coefficient.  Can be changed later, maybe as property of the wall/ball
-coF =: 0.68
+NB. can be changed later as desired
+coF =: 1
 
 R =: getradius__disk ''
 Md =: getmass__disk ''
@@ -114,10 +117,35 @@ V =: getvelocity__disk ''
 Rotd =: getrotation__disk ''
 Rotw =: getrotation__wall ''
 aVd =: getrotation__disk ''
+posc =: getposition__disk ''
+posedge =: getposition__wall''
+
+
+
+angle =: | (posedge- posc  )
+ 
+hyp =: %:(+/ (angle^2))
+NB. hypotenuse
+t =: ((0{angle) % hyp)
+
+angle1 =: _1&o.t
+
+NB. A nice complicated formula that calculates the angle of the ball. 
+actangle =: (angle1 + (1p1 + Rotw) - (1p1-angle1)) + (1p1%4)
+NB. actangle is the actual angle.
+NB. velocityafter =:    (V * ( 1&o.actangle)) ,( V * ( 2&o.actangle) ) 
+NB. the x and y components of velocity.
+shiftedvelocity =: V * (1&o.actangle)
+NB. the shifted coordinate system. 
+
+
+
+
+
 NB. This will be changed with coordinate rotations that Isaac will be doing.
 NB. I am currently writing this for a collision with the groud, and will add Isaac's code in later
-Vx =: {. V
-Vy =: {: V
+Vx =: {. shiftedvelocity
+Vy =: {: shiftedvelocity
 
 dD =: 0.02 * R
 dT =: dD % Vy
