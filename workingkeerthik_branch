@@ -224,6 +224,15 @@ glellipse (getposition__newball''),(100 100)
 glpaintx''
 )
 
+canvas_createbox_button =: verb define
+newbox =.	 '' conew 'poly'
+glsel canvasisi
+glbrush glrgb 3#196
+glpen 2 0 [  glrgb 3#128
+glpolygon (100 100),(200 200),(200 100),(100 200)
+glpaintx''
+)
+
 canvas_destroyallballs_button =: verb define
 destroy inlocalesv widgetlist_widget_''
 glsel canvasisi
