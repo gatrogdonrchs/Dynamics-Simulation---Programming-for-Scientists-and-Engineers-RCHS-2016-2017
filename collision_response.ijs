@@ -164,17 +164,17 @@ I =: 0.5 * Md * (R^2)
 NB. torque calculation:
 NB. the last part sets the torque to be positive or negative, depending on the velocity of the point in contact with the wall
 NB. (velocityx + velocity at edge due to rotation)
-Torque =: Fn * coF * R * (* (Vx + R*aV)) 
+Torque =: Fn * coF * R * (* (Vx + R*aVd)) 
 
 NB. final angular velocity calculation
-aV2 =: I %~ (torque * dT) + (I * aV)
+aV2 =: I %~ (torque * dT) + (I * aVd)
 
 NB. end of class notes: 
 NB. now we need to subtract the new rotational energy from the initial kinetic energy, and find the new kinetic energy
 NB. I think the energy subtracts only from the x component, because the force of friction is perpendicular to the y component. 
 NB. Idk this for sure though
 
-Vxp =: %: ((Vx^2) - ((R^4)*(aV2^4)))\
+Vxp =: %: ((Vx^2) - ((R^4)*(aV2^4)))
 Vyp =: _1 * Vy
 
 
