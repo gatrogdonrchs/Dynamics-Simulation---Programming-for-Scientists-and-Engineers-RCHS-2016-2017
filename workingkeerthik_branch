@@ -37,7 +37,7 @@ cc yvelo edit;
 cc createball button;
 cc start button;
 cc stop button;
-cc destroyallballsbutton;
+cc destroyallballs button;
 bin z;
 bin z; 
 pas 6 6;
