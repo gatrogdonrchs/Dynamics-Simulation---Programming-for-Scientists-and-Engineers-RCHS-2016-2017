@@ -68,17 +68,34 @@ v2p =: v2 - n * p * m2
 setvelocity__disk1 v1p
 setvelocity__disk2 v2p
 )
+disk_rect =: monad define
+
+velocity =: getvelocity__disk1 ''
+
+posc =: getposition__disk1 ''
+
+posedge =: getposition__rect1''
+
+rotation =: getrotation__rect1''
 
 
-disk_rect =: dyad define
+angle =: | (posedge- posc  )
+ 
+hyp =: %:(+/ (angle^2))
+NB. hypotenuse
+t =: ((0{angle) % hyp)
 
+angle1 =: _1&o.t
 
-
-NB. Input: 
-NB. x is point of collision, 
-NB. y is the two colliding locales
-
+NB. A nice complicated formula that calculates the angle of the ball. 
+actangle =: (angle1 + (1p1 + rotation) - (1p1-angle1)) + (1p1%4)
+NB. actangle is the actual angle.
+velocityafter =:    (velocity * ( 1&o.actangle)) ,( velocity * ( 2&o.actangle) ) 
+NB. the x and y components of velocity.
+shiftedvelocity =: velocity * (1&o.actangle)
+NB. the shifted coordinate system. 
 )
+
 
 disk_wall =: monad define
 NB. input is disk locale, wall locale
