@@ -146,6 +146,11 @@ NB. now we need to subtract the new rotational energy from the initial kinetic e
 NB. I think the energy subtracts only from the x component, because the force of friction is perpendicular to the y component. 
 NB. Idk this for sure though
 
+Vxp =: %: ((Vx^2) - ((R^4)*(aV2^4)))\
+Vyp =: _1 * Vy
+
+
+
 )
 
 NB. https://phet.colorado.edu/en/simulation/collision-lab
