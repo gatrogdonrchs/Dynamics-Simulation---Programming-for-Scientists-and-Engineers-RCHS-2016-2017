@@ -9,32 +9,37 @@ coinsert 'jgl2'
 
 NB. (0 : 0) Will define a name, in this case CANVAS, as a noun (0), and in placing the second 0, will state than any code below
 NB.   is part of the definition of that noun until a ) appears.  Similarly 3 : 0 does the same but for a verb.
-CANVAS =: 0 : 0
+
 NB. The verb (pc), short for "parent create," creates a standard parent window, in this case with the name 'canvas'
-pc canvas;
 NB. "minwh" is a wd command that sets the minimum width and height of the standard parent window
-minwh 1200 900;
 NB. A cc, or child class, creates a specific entity in the parental window, of which there are many types
 NB. (wd 'cc id isidraw') Creates a widget window which can be acted upon by gl2 commands (graphics commands)
 NB. In this case, the widget is named 'canvasisi'
-cc canvasisi isidraw;
+
 NB. Creates edit windows (a type of child class) with the names of xcord, ycord, xvelo, and yvelo
+NB. Creates buttons (a type of child class) with the names of createball, start, and stop
+NB. bins are "invisible two-dimensional containers" which can contain child controls or other pins
+NB. Widgets are automatically stacked vertically in a bin unless commands such as 'binh" or "binv" are used
+NB.  bin z ends a specific bin, in this case the bin with all of the buttons and edits
+
+NB. The wd 'pas' command adjusts the parental size to create margins
+NB.   in this case, the left and top margins are both 6, and the right/bottom margins will automatically be
+NB.   the same as the left and top margins
+
+CANVAS =: 0 : 0
+pc canvas;
+minwh 1200 900;
+cc canvasisi isidraw;
 cc xcord edit;
 cc ycord edit;
 cc xvelo edit;
 cc yvelo edit;
-NB. Creates buttons (a type of child class) with the names of createball, start, and stop
 cc createball button;
 cc start button;
 cc stop button;
-NB. bins are "invisible two-dimensional containers" which can contain child controls or other pins
-NB. Widgets are automatically stacked vertically in a bin unless commands such as 'binh" or "binv" are used
-NB.  bin z ends a specific bin, in this case the bin with all of the buttons and edits
+cc destroyallballsbutton;
 bin z;
 bin z; 
-NB. The wd 'pas' command adjusts the parental size to create margins
-NB.   in this case, the left and top margins are both 6, and the right/bottom margins will automatically be
-NB.   the same as the left and top margins
 pas 6 6;
 )
 
@@ -89,43 +94,59 @@ codestroy''
 )
 
 NB. Methods common to all widgets
+NB. In other words, these verbs are defined in the widget locale and can therefore be run on any type of widget
+NB. This is because subsequent locales such as 'disk' will include the widget locale in their copath 
+
+NB. When given an index takes a particular widget in the widgetlist using that index
+NB. Ex. If y is "1" takes 1 { widgetlist_widget_, which would be the second widget that was created
 getwidget =: verb define
 y{(widgetlist_widget_)
 )
 
+NB. Sets the velocity to the input value given
 setvelocity =: verb define
 velocity =: y
 )
 
+NB. Output is the velocity value; must be run after setvelocity has been run
 getvelocity =: verb define
 velocity
 )
 
+NB. Sets the position to the input value given
 setposition =: verb define
 position =: y
 )
 
+NB. Output is the position value; must be run after setposition has been run
 getposition =: verb define
 position
 )
 
+NB. Sets the rotation to the input value given
 setrotation =: verb define
 rotation =: y
 )
 
+NB. Sets the angular velocity to the input value given 
 setavelocity =: verb define
 avelocity =: y
 )
 
+NB. Sets the mass to the input value given
 setmass =: verb define
-amass =: y
+mass =: y
 )
 
 setgraphrep =: verb define
 )
 
+
 NB. ******************** disks ******************
+
+NB. Changes the current locale to the disk locale
 cocurrent 'disk'
+NB. Inserts the widget locale into the copath of the 
 coinsert 'widget'
 
 
