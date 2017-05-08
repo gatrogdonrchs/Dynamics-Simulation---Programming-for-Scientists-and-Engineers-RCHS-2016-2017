@@ -247,6 +247,7 @@ sys_timer =: verb define
 cp =: getposition inlocalesv (widgetlist_widget_)''
 cv =: getvelocity inlocalesv (widgetlist_widget_)''
 setposition inlocalesc widgetlist_widget_ (cp+cv)
+setvelocity inlocalesc widgetlist_widget_ (cv + (0, 0.196))
 try.
 glsel canvasisi
 glclear''
