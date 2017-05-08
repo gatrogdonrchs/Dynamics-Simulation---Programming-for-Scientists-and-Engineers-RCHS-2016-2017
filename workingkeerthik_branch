@@ -1,49 +1,63 @@
+NB. The verb "require" loads a script, and in this case it loads the 'gl2' script that contains useful graphics verbs
+NB. To view the gl2 script, one can execute (open 'gl2') in the ijx window
 require 'gl2'
+NB. The current locale, which can be viewed by executing (coname''), is the 'base' locale
+NB. Each locale has a path, which can be viewed by executing (copath'localename')
+NB. The coinsert verb inserts a new locale, the jgl2 locale shared among all branche, and places it right before the z locale 
+NB.    along the copath of base
 coinsert 'jgl2'
 
-	
-
+NB. (0 : 0) Will define a name, in this case CANVAS, as a noun (0), and in placing the second 0, will state than any code below
+NB.   is part of the definition of that noun until a ) appears.  Similarly 3 : 0 does the same but for a verb.
 CANVAS =: 0 : 0
+NB. The verb (pc), short for "parent create," creates a standard parent window, in this case with the name 'canvas'
 pc canvas;
-minwh 1200 900;cc canvasisi isidraw;
+NB. "minwh" is a wd command that sets the minimum width and height of the standard parent window
+minwh 1200 900;
+NB. A cc, or child class, creates a specific entity in the parental window, of which there are many types
+NB. (wd 'cc id isidraw') Creates a widget window which can be acted upon by gl2 commands (graphics commands)
+NB. In this case, the widget is named 'canvasisi'
+cc canvasisi isidraw;
+NB. Creates edit windows (a type of child class) with the names of xcord, ycord, xvelo, and yvelo
 cc xcord edit;
 cc ycord edit;
 cc xvelo edit;
 cc yvelo edit;
+NB. Creates buttons (a type of child class) with the names of createball, start, and stop
 cc createball button;
 cc start button;
 cc stop button;
-cc destroyallballs button;
+NB. bins are "invisible two-dimensional containers" which can contain child controls or other pins
+NB. Widgets are automatically stacked vertically in a bin unless commands such as 'binh" or "binv" are used
+NB.  bin z ends a specific bin, in this case the bin with all of the buttons and edits
 bin z;
 bin z; 
+NB. The wd 'pas' command adjusts the parental size to create margins
+NB.   in this case, the left and top margins are both 6, and the right/bottom margins will automatically be
+NB.   the same as the left and top margins
 pas 6 6;
 )
 
 NB. Execute the form
 canvas_run =: monad define
+NB. The (wd) command sends commands to the windows driver
+NB. It's arguments must be separated by semicolons
+NB. By running (wd CANVAS), the entire CANVAS noun is run as many arguments sent to the window driver 
 wd CANVAS
-wd'pshow'
+NB. Displays the current graphics window on the screen
+wd 'pshow'
 )
 
 NB. Close the window
 canvas_close =: monad define
+NB. Closes the parent window.  'pclose' is essentially the opposite command of 'pshow'
 wd'pclose;'
 )
 
+NB. The canvas_cancel verb will do the exact same thing as the canvas_close verb
 canvas_cancel =: canvas_close
 
-
-
-
-
-
 NB. Dynamics simulation
-
-NB. Calculate length of next time step
-NB. For each pair of objects, find out how long till they collide
-NB. Result is time to next collision
-calctimestep =: verb define
-)
 
 NB. Widgets
 NB. A widget represents a physical object
@@ -51,17 +65,26 @@ NB. It has a graphical representation and a mathematical representation
 
 NB. Subclasses of widgets are disks, rectangles, etc.
 
-
+NB. Sets the locale to the widget locale, under which new widgets can be created and defined
 cocurrent 'widget'
 
+NB. Sets the widgetlist to a boxed list with zero boxes
+NB. The noun "a:" creates an empty box, so create a list with zero of those empty boxes
 widgetlist =: 0$a:
 
+NB. Creates a new widget as part of the widgetlist
 create =: verb define
+NB. Since widgetlist_widget_ is a boxed list, and coname'' produces the name of the current locale, it adds the name of the 
+NB.   current locale as an additional box in that widget list
 widgetlist_widget_ =: widgetlist_widget_ , coname''
 )
 
+NB. Destroys all widgets
 destroy =: verb define
+NB. Removes all boxes in widgetlist_widget_ that contain the same name as the current locale name
+NB. For example, if the current locale is 'disk' destroy all boxes in widgetlist_widget_ containing the word disk
 widgetlist_widget_ =: widgetlist_widget_ -. coname''
+NB. Destroys/wipes the current locale
 codestroy''
 )
 
