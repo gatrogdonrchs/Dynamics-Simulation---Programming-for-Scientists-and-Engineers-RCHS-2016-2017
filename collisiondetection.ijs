@@ -1,14 +1,12 @@
+NB. This verb should be used to operate on widgetlist, it finds all the pairs of
+NB.  widgets and calls the next verb, colldet, to operate on each pair.
 filter =: verb define
-wlist =: i. $ widgetlist
+wlist =: i. $ y
 NB. inputs a list, outputs the index of all the pairs,
 NB.  not including duplicates (ex. forwards but not 
 NB.  backwards).
 uppertri =: ;@:((,. i.)&.>)@:(i.&.<:)
 
-NB. this inputs the wlist, and spits out a list of the
-NB.  times of every collision of the pairs from 
-NB.  uppertri. collide is supposed to find the time
-NB.(collide@:(<@["1 { ])"1)~ uppertri) wlist
 upperlist =: uppertri wlist
 colldet"1 upperlist { widgetlist
 )
