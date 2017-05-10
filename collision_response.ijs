@@ -71,17 +71,24 @@ setvelocity__disk2 v2p
 
 
 
+
 disk_rect =: monad define
 
-velocity =: getvelocity__disk1 ''
+NB. disk1 =: [wpw1] { widgetlist_widget_
+NB. disk2 =: [wpw2] { widgetlist_widget_
+NB. wpw means position of widget in collision with respect to widgetlist_widget_
+disk1 =: 0 { widgetlist_widget_
+rect1 =: 1 { widgetlist_widget_
 
-posc =: getposition__disk1 ''
+velocity2 =: getvelocity__disk1''
+
+posc =: getposition__disk1''
 
 posedge =: getposition__rect1''
 
-rotation =: getrotation__rect1''
+rotation =: 0 NB. getrotation__rect1''
 
-
+velocity =: %:(+/(velocity2)^2)
 angle =: | (posedge- posc  )
  
 hyp =: %:(+/ (angle^2))
@@ -91,12 +98,45 @@ t =: ((0{angle) % hyp)
 angle1 =: _1&o.t
 
 NB. A nice complicated formula that calculates the angle of the ball. 
-actangle =: (angle1 + (1p1 + rotation) - (1p1-angle1)) + (1p1%4)
-NB. actangle is the actual angle.
-velocityafter =:    (velocity * ( 1&o.actangle)) ,( velocity * ( 2&o.actangle) ) 
+actangle =: (angle1 + (1p1 + rotation) - (1p1-angle1)) + rotation
+velocity1 =:    (velocity * ( 1&o.actangle)) ,( velocity * ( 2&o.actangle) ) 
 NB. the x and y components of velocity.
-shiftedvelocity =: velocity * (1&o.actangle)
+shiftedvelocity =: velocity1 * (1&o.actangle)
 NB. the shifted coordinate system. 
+smoutput velocity1
+smoutput shiftedvelocity
+
+)
+
+coordinate_rotation =: monad define
+
+disk1 =: 0 { widgetlist_widget_
+rect1 =: 1 { widgetlist_widget_
+
+velocity2 =: getvelocity__disk1''
+
+posc =: getposition__disk1''
+
+posedge =: getposition__rect1''
+
+rotation =: 0 NB. getrotation__rect1''
+
+velocity =: %:(+/(velocity2)^2)
+angle =: | (posedge- posc  )
+
+hyp =: %:(+/ (angle^2))
+NB. hypotenuse
+t =: ((0{angle) % hyp)
+
+angle1 =: _1&o.t
+NB. A nice complicated formula that calculates the angle of the ball. 
+actangle =: (angle1 + (1p1 + rotation) - (1p1-angle1)) + rotation
+
+NB. the x and y components of velocity.
+shiftedvelocity =: velocity % (1&o.actangle)
+NB. the shifted coordinate system. 
+smoutput velocity1
+smoutput shiftedvelocity
 )
 
 
