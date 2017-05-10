@@ -25,9 +25,8 @@ obj1 =: {: y
 
 vel0 =: getvelocity__obj0''
 vel1 =: getvelocity__obj1''
-veldiff =: | vel0 - vel1
-
-
+veldiff =: | vel1 - vel2
+speed =: %: (*: {.veldiff) + (*: {:veldiff)
 
 
 bpos0 =: getbpos__obj0''
@@ -41,19 +40,15 @@ ydist =: -/ ys
 distsq =:   (*: xdist) + (*: ydist)
 dist =: %: distsq
 
-div =: dist % veldiff
-
-NB.colltime =: | (xdist,ydist) % (vel0 - vel1)
+div =: dist % speed
 
 
 if. (vel0 +. vel1) ~: 0 do. 
-else. if. (div > 2) do. else.
 
+NB. The 20 is the frame time, change if needed.
+else. if. (div < 20) do.
 
 ('cd',type__obj0,type__obj1)~ obj0,obj1
-
-
-
 
 end.
 end.
@@ -61,10 +56,10 @@ end.
 
 
 cd_disk_disk =: monad define
-NB. Calculates one frame in advance.
 disk0 =: {.y
 disk1 =: {:y
 
+NB. Grab widget info needed for calculations
 vel0 =: velocity__disk0
 vel1 =: velocity__disk1
 
@@ -74,16 +69,21 @@ pos1 =: position__disk1
 rad0 =: radius__disk0
 rad1 =: radius__disk1
 
-pmass0 =: pmass__disk0
-pmass1 =: pmass__disk1
-
-NB. center of psuedomass
-cop =: ((pmass0*pos0) + (pmass1*pos1)) % (pmass0+pmass1)
+NB. Find center of psuedomass
+cop =: ((rad0*pos0) + (rad1*pos1)) % (rad0+rad1)
 
 rvec =: pos0 - cop
 
+magvel0 =: %: (*: 0{vel0) + (*: 1{vel0)
+veldiv =:(vel0 % magvel0))
 
+d =: (-veldiv) +/@:* rvec 
+avec =: rvec + (d * veldiv)
+evec =: -avec
+h =: %: (*: rad0) - (*: evec)
+dist =: d - h 
 
+time =: dist % vel0
 
 )
 NB. Rough filtering
