@@ -1,7 +1,5 @@
 filter =: verb define
-NB. input widgetlist
 wlist =: i. $ widgetlist
-
 NB. inputs a list, outputs the index of all the pairs,
 NB.  not including duplicates (ex. forwards but not 
 NB.  backwards).
@@ -11,8 +9,8 @@ NB. this inputs the wlist, and spits out a list of the
 NB.  times of every collision of the pairs from 
 NB.  uppertri. collide is supposed to find the time
 NB.(collide@:(<@["1 { ])"1)~ uppertri) wlist
-upperlist =: uppertri widgetlist
-colldet upperlist { widgetlist
+upperlist =: uppertri wlist
+colldet"1 upperlist { widgetlist
 )
 
 colldet =: verb define
