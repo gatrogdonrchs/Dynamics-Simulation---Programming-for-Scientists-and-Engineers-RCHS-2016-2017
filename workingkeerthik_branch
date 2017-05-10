@@ -146,7 +146,8 @@ NB. ******************** disks ******************
 
 NB. Changes the current locale to the disk locale
 cocurrent 'disk'
-NB. Inserts the widget locale into the copath of the 
+NB. Inserts the widget locale into the copath of the disk locale
+NB. This is important because it allows verbs defined in the widget locale to be run while in the disk locale
 coinsert 'widget'
 
 NB. The f. adverb will run the create verb, as it is defined in the widget locale, 
@@ -224,9 +225,16 @@ NB. conew creates a new locale/widget class, in this case with the name of disk
 NB. The '' to the left of conew can be replaced with creation parameters under other circumstances
 NB. Assign this newly created locale/widget under the name newball
 newball =.	 '' conew 'disk'
+NB. The __ shows that the setposition verb will be run within the newball locale 
+NB. Sets the position_newball_ value to the xcord and ycord numbers that are typed into the respective edit boxes on the graphics screen
 setposition__newball (". xcord),(". ycord)
+NB. Sets the velocity_newball_ value to the xvelo and yvelo numbers that are typed into the respective edit boxes on the graphics screen
 setvelocity__newball ((". xvelo)%50),((". yvelo)%50)
+NB. "glsel" selects the current window/class on which to operate graphics commands
+NB. In this case we are operating on the canvaisi graphics window we created under the CANVAS noun
 glsel canvasisi
+NB. Within canvasisi, use glbrush to set the brush color
+NB. This color is defined using the glrgb command, which uses the 3#
 glbrush glrgb 3#196
 glpen 2 0 [  glrgb 3#128
 glellipse (getposition__newball''),(100 100)
