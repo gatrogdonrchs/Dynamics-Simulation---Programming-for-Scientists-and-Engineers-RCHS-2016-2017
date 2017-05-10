@@ -149,18 +149,23 @@ cocurrent 'disk'
 NB. Inserts the widget locale into the copath of the 
 coinsert 'widget'
 
-
-
+NB. The f. adverb will run the create verb, as it is defined in the widget locale, 
+NB.   via applying it to the current locale (in this case disk)
 create =: verb define
 create_widget_ f. y
 )
+
+NB. Use the f. adverb to run the destroy verb within the disk locale
 destroy =: verb define
 destroy_widget_ f. ''
 )
 
+NB. Change the current locale to base, so that these verbs will be defined in the base locale
 cocurrent 'base'
+NB. Require graphics verbs in the gl2 script and insert the jgl2 locale (we use for the project) into the base copath
 require 'gl2'
 coinsert 'jgl2'
+
 
 inlocalesc =: 2 : 0
 cocurrent =. 18!:4
@@ -213,7 +218,11 @@ cocurrent i
 res
 )
 
+NB. Creates a new disk/ball on the graphics screen
 canvas_createball_button =: verb define
+NB. conew creates a new locale/widget class, in this case with the name of disk
+NB. The '' to the left of conew can be replaced with creation parameters under other circumstances
+NB. Assign this newly created locale/widget under the name newball
 newball =.	 '' conew 'disk'
 setposition__newball (". xcord),(". ycord)
 setvelocity__newball ((". xvelo)%50),((". yvelo)%50)
