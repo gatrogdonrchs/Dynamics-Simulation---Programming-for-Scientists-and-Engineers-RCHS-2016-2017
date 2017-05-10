@@ -218,6 +218,20 @@ Vyp =: _1 * Vy
 
 
 
+velocity =: %:(+/(Vxp,Vyp)^2)
+angle =: | (posedge- posc  )
+
+hyp =: %:(+/ (angle^2))
+NB. hypotenuse
+t =: ((0{angle) % hyp)
+
+angle1 =: _1&o.t
+NB. A nice complicated formula that calculates the angle of the ball. 
+actangle =: (angle1 + (1p1 + rotation) - (1p1-angle1)) + rotation
+
+NB. the x and y components of velocity.
+shiftedvelocity =: velocity % (1&o.actangle)
+setvelocity__disk shiftedvelocity
 )
 
 NB. https://phet.colorado.edu/en/simulation/collision-lab
