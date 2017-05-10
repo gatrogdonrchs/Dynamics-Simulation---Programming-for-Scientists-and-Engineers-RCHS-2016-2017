@@ -101,7 +101,7 @@ NB. A nice complicated formula that calculates the angle of the ball.
 actangle =: (angle1 + (1p1 + rotation) - (1p1-angle1)) + rotation
 velocity1 =:    (velocity * ( 1&o.actangle)) ,( velocity * ( 2&o.actangle) ) 
 NB. the x and y components of velocity.
-shiftedvelocity =: velocity1 * (1&o.actangle)
+shiftedvelocity =: velocity * (1&o.actangle)
 NB. the shifted coordinate system. 
 smoutput velocity1
 smoutput shiftedvelocity
