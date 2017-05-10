@@ -161,7 +161,7 @@ posc =: getposition__disk ''
 posedge =: getposition__wall''
 
 
-
+velocity =: %:(+/(V)^2)
 angle =: | (posedge- posc  )
  
 hyp =: %:(+/ (angle^2))
@@ -173,9 +173,8 @@ angle1 =: _1&o.t
 NB. A nice complicated formula that calculates the angle of the ball. 
 actangle =: (angle1 + (1p1 + Rotw) - (1p1-angle1)) + (1p1%4)
 NB. actangle is the actual angle.
-NB. velocityafter =:    (V * ( 1&o.actangle)) ,( V * ( 2&o.actangle) ) 
 NB. the x and y components of velocity.
-shiftedvelocity =: V * (1&o.actangle)
+shiftedvelocity =: velocity * (1&o.actangle)
 NB. the shifted coordinate system. 
 
 
