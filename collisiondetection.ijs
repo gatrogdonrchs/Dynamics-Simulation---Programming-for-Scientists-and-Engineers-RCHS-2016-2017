@@ -56,8 +56,8 @@ disk0 =: {.y
 disk1 =: {:y
 
 NB. Grab widget info needed for calculations
-vel0 =: velocity__disk0
-vel1 =: velocity__disk1
+v0 =: velocity__disk0
+v1 =: velocity__disk1
 
 pos0 =: position__disk0
 pos1 =: position__disk1
@@ -66,12 +66,15 @@ rad0 =: radius__disk0
 rad1 =: radius__disk1
 
 NB. Find center of psuedomass
+NB. Here we say that the pseudomass is the same as  
+NB. the radius to make calculations easier.
 cop =: ((rad0*pos0) + (rad1*pos1)) % (rad0+rad1)
 
+NB. Vector from the center of pseudomass to the position
 rvec =: pos0 - cop
 
-magvel0 =: %: (*: 0{vel0) + (*: 1{vel0)
-veldiv =:(vel0 % magvel0))
+magv0 =: %: (*: 0{v0) + (*: 1{v0)
+veldiv =:(v0 % magv0))
 
 d =: (-veldiv) +/@:* rvec 
 avec =: rvec + (d * veldiv)
@@ -79,7 +82,7 @@ evec =: -avec
 h =: %: (*: rad0) - (*: evec)
 dist =: d - h 
 
-time =: dist % vel0
+time =: dist % v0
 
 )
 NB. Rough filtering
