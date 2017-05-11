@@ -196,16 +196,31 @@ coinsert 'widget'
 
 
 canvas_createbox_button =: verb define
-newbox =.	 '' conew 'poly'
+wall1 =.	 '' conew 'poly'
+wall2 =.	 '' conew 'poly'
+wall3 =.	 '' conew 'poly'
+wall4 =.	 '' conew 'poly'
+
+setposition__wall1 (0 0),(5 0),(5 600),(0 600)
+
+setposition__wall2 (0 0),(1200 0),(1200 5),(0 5)
+
+setposition__wall3 (0 600),(1200 600),(1200 595),(0 595)
+
+setposition__wall4 (1200 0),(1195 0),(1195 600),(1200 600)
+
 glsel canvasisi
 glbrush glrgb (244 89 66)
 glpen 2 0 [  glrgb (244 89 66)
-glpolygon (0 0),(5 0),(5 600),(0 600)
-glpolygon (0 0),(1200 0),(1200 5),(0 5)
-glpolygon (0 600),(1200 600),(1200 595),(0 595)
-glpolygon (1200 0),(1195 0),(1195 600),(1200 600)
+glpolygon (getposition__wall1'')
+glpolygon (getposition__wall2'')
+glpolygon (getposition__wall3'')
+glpolygon (getposition__wall4'')
 glpaintx''
 )
+
+
+
 
 cocurrent 'base'
 NB. Run a timestep of length y
@@ -215,7 +230,8 @@ NB. set up a try/catch at some point
 sys_timer =: verb define
 cp =: getposition inlocalesv widgetlist_disk_''
 cv =: getvelocity inlocalesv widgetlist_disk_''
-setposition inlocalesc widgetlist_disk_ (cp+cv)
+cv1 =: cv + (0,1.96)
+setposition inlocalesc widgetlist_disk_ (cp+cv1)
 try.
 glsel canvasisi
 glclear''
@@ -225,6 +241,7 @@ for_objnum. i. 0{($(getposition inlocalesv widgetlist_disk_'')) do.
 pos =: (<:objnum){(getposition inlocalesv widgetlist_disk_'')
 glellipse pos,(100,100)
 end.
+
 glpaintx''
 catch.
 smoutput 'gl error'
