@@ -21,7 +21,7 @@ obj1 =: {: y
 
 vel0 =: getvelocity__obj0''
 vel1 =: getvelocity__obj1''
-veldiff =: | vel1 - vel2
+veldiff =: | vel1 - vel0
 speed =: %: (*: {.veldiff) + (*: {:veldiff)
 
 
