@@ -19,24 +19,24 @@ NB.  find the time until the collision.
 obj0 =: {. y
 obj1 =: {: y
 
-vel0 =: getvelocity__obj0''
-vel1 =: getvelocity__obj1''
-veldiff =: | vel1 - vel0
-speed =: %: (*: {.veldiff) + (*: {:veldiff)
+vel0 =. getvelocity__obj0''
+vel1 =. getvelocity__obj1''
+veldiff =. | vel1 - vel0
+speed =. %: (*: {.veldiff) + (*: {:veldiff)
 
 
-bpos0 =: getbpos__obj0''
-bpos1 =: getbpos__obj1''
+bpos0 =. getbpos__obj0''
+bpos1 =. getbpos__obj1''
 
-xs =: {. bpos0,.bpos1
-ys =: {: bpos0,.bpos1
+xs =. {. bpos0,.bpos1
+ys =. {: bpos0,.bpos1
 
-xdist =: -/ xs
-ydist =: -/ ys
-distsq =:   (*: xdist) + (*: ydist)
-dist =: %: distsq
+xdist =. -/ xs
+ydist =. -/ ys
+distsq =.   (*: xdist) + (*: ydist)
+dist =. %: distsq
 
-div =: dist % speed
+div =. dist % speed
 
 NB. If both objects are stationary, don't bother operating on them.
 if. (vel0 +. vel1) ~: 0 do. 
@@ -53,57 +53,78 @@ end.
 
 NB. Detecting collision between two disks
 cd_disk_disk =: monad define
-disk0 =: {.y
-disk1 =: {:y
+disk0 =. {.y
+disk1 =. {:y
 
 NB. Grab widget info needed for calculations
-v0 =: velocity__disk0
-v1 =: velocity__disk1
+v0 =. velocity__disk0
+v1 =. velocity__disk1
 
-pos0 =: position__disk0
-pos1 =: position__disk1
+pos0 =. position__disk0
+pos1 =. position__disk1
 
-rad0 =: radius__disk0
-rad1 =: radius__disk1
+rad0 =. radius__disk0
+rad1 =. radius__disk1
 
 NB. Find center of psuedomass
 NB. Here we say that the pseudomass is the same as  
 NB.  the radius to make calculations easier.
-cop =: ((rad0*pos0) + (rad1*pos1)) % (rad0+rad1)
+cop =. ((rad0*pos0) + (rad1*pos1)) % (rad0+rad1)
 
 NB. Vector from the center of pseudomass to the position
-rvec =: pos0 - cop
+rvec =. pos0 - cop
 
 NB. The magnitude of v0
-magv0 =: %: (*: 0{v0) + (*: 1{v0)
+magv0 =. %: (*: 0{v0) + (*: 1{v0)
 NB. A unit vector for the direction of v0
-veldiv =:(v0 % magv0))
+veldiv =.(v0 % magv0))
 
 NB. Distance between the objects current position,
 NB.  and the point that is the magnitude of rvec 
 NB.  with the direction of v0
-d =: (-veldiv) +/@:* rvec 
+d =. (-veldiv) +/@:* rvec 
 
 NB. the vector that goes from the center of pseudomass
 NB.  to the end of d that is closer to the center of 
 NB.  pseudomass
-avec =: rvec + (d * veldiv)
+avec =. rvec + (d * veldiv)
 
 NB. The negative A vector
-evec =: -avec
+evec =. -avec
 NB. The distance between the end of d near the COP and
 NB.  the center of the disk at the time of collision
-h =: %: (*: rad0) - (*: evec)
+h =. %: (*: rad0) - (*: evec)
 
 NB. The distance between the center of the disk at
 NB.  the time of the calculation and the center of 
 NB.  the disk at the time of collision
-dist =: d - h 
+dist =. d - h 
 
 NB. The time until the collision
-time =: dist % v0
+time =. dist % v0
 
 )
+
+cd_disk_rectangle =: monad define
+object0 =. {.y
+object1 =. {:y
+
+NB. Grab widget info needed for calculations
+v0 =. velocity__disk0
+v1 =. velocity__disk1
+
+pos0 =. position__disk0
+pos1 =. position__disk1
+
+rad0 =. radius__disk0
+rad1 =. radius__disk1
+
+
+)
+
+cd_rectangle_disk =: cd_disk_rectangle
+
+
 NB. Rough filtering
 NB.  take sums of velocity vectors and distance between
 
