@@ -19,14 +19,14 @@ NB.  find the time until the collision.
 obj0 =: {. y
 obj1 =: {: y
 
-vel0 =. getvelocity__obj0''
-vel1 =. getvelocity__obj1''
+vel0 =. velocity__obj0
+vel1 =. velocity__obj1
 veldiff =. | vel1 - vel0
 speed =. %: (*: {.veldiff) + (*: {:veldiff)
 
 
-bpos0 =. getbpos__obj0''
-bpos1 =. getbpos__obj1''
+bpos0 =. bpos__obj0
+bpos1 =. bpos__obj1
 
 xs =. {. bpos0,.bpos1
 ys =. {: bpos0,.bpos1
@@ -108,18 +108,6 @@ time =. dist % v0
 cd_disk_rectangle =: monad define
 object0 =. {.y
 object1 =. {:y
-
-NB. Grab widget info needed for calculations
-v0 =. velocity__disk0
-v1 =. velocity__disk1
-
-pos0 =. position__disk0
-pos1 =. position__disk1
-
-rad0 =. radius__disk0
-rad1 =. radius__disk1
-
-
 )
 
 cd_rectangle_disk =: cd_disk_rectangle
