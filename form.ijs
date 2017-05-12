@@ -139,10 +139,14 @@ cc Create button;set Create wh 50 20;
 
 canvas_widgsel_select =: monad define
 if. widgsel -: 'Create Widget' do.
-smoutput 'Creating Widget...'
 wd CREATEWIDGET
 wd 'pshow'
 end.
+)
+
+additems =: dyad define
+items =: wd 'get widgsel allitems'
+wd 'set ',x,' items ',(items),y
 )
 
 widgettable =: 0$a: 
@@ -152,6 +156,7 @@ vars =: ((". newsizex);(". newsizey);(". newposx);(". newposy);(". newvelx);(". 
 temp =: vars conew 'disk'
 newinfo =: <(getname__temp '');(getsize__temp '');(getposition__temp'');(getvelocity__temp '')
 widgettable =: widgettable , newinfo
+'widgsel' additems newname
 glsel canvasisi
 glbrush glrgb 3#196
 glpen 2 0 [  glrgb 3#128
