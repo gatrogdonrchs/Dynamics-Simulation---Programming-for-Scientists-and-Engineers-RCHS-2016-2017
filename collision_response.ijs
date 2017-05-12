@@ -237,3 +237,8 @@ setvelocity__disk shiftedvelocity
 NB. https://phet.colorado.edu/en/simulation/collision-lab
 NB. http://www.metanetsoftware.com/2016/n-tutorial-a-collision-detection-and-response#section3
 NB. http://ericleong.me/research/circle-circle/#dynamic-static-circle-collision-response
+
+
+NB. setvelocity inlocalesc widgetlist_disk_ (cv +"1 (0 0.196))
+NB. http://farside.ph.utexas.edu/teaching/301/lectures/node76.html
+NB. this literally has the equations we need.  Just rotate the frame, then rotate back
