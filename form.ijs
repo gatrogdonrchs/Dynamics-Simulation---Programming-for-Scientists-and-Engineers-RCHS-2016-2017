@@ -91,6 +91,59 @@ destroy_widget_ f. ''
 )
 
 cocurrent 'base'
+require 'gl2'
+coinsert 'jgl2'
+
+inlocalesc =: 2 : 0
+cocurrent =. 18!:4
+i =. 18!:5 ''
+for_l. n do.
+  NB.?lintonly l =. <''
+  cocurrent l
+  u l_index{y
+end.
+cocurrent i
+''
+:
+cocurrent =. 18!:4
+i =. 18!:5 ''
+for_l. n do.
+  NB.?lintonly l =. <''
+  cocurrent l
+  x u l_index{y
+end.
+cocurrent i
+''
+)
+
+NB. Execute u in locales n, returning list of results
+inlocalesv =: 2 : 0
+if. 0=#n do. '' return. end.
+cocurrent =. 18!:4
+i =. 18!:5 ''
+cocurrent {. n
+res =. ,: u y
+for_l. }.n do.
+  NB.?lintonly l =. <''
+  cocurrent l
+  res =. res , u y
+end.
+cocurrent i
+res
+:
+if. 0=#n do. '' return. end.
+cocurrent =. 18!:4
+i =. 18!:5 ''
+cocurrent {. n
+res =. ,: x u y
+for_l. }.n do.
+  NB.?lintonly l =. <''
+  cocurrent l
+  res =. res , x u y
+end.
+cocurrent i
+res
+)
 
 NB._____________FORM_GOODIEs______________
 CANVAS =: 0 : 0
@@ -144,9 +197,10 @@ wd 'pshow'
 end.
 )
 
-additems =: dyad define
+additems =: monad define
+wd 'psel canvas'
 items =: wd 'get widgsel allitems'
-wd 'set ',x,' items ',(items),y
+wd 'set widgsel items ',(items),y
 )
 
 widgettable =: 0$a: 
@@ -156,14 +210,15 @@ vars =: ((". newsizex);(". newsizey);(". newposx);(". newposy);(". newvelx);(". 
 temp =: vars conew 'disk'
 newinfo =: <(getname__temp '');(getsize__temp '');(getposition__temp'');(getvelocity__temp '')
 widgettable =: widgettable , newinfo
-'widgsel' additems newname
+wd'pclose;'
+additems newname
 glsel canvasisi
 glbrush glrgb 3#196
 glpen 2 0 [  glrgb 3#128
 glellipse (getposition__temp''),(getsize__temp'')
 glpaintx''
-wd'pclose;'
 )
+
 NB. Execute the form
 canvas_run =: monad define
 wd CANVAS
