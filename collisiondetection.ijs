@@ -8,7 +8,7 @@ NB.  backwards).
 uppertri =: ;@:((,. i.)&.>)@:(i.&.<:)
 
 upperlist =: uppertri wlist
-colldet"1 upperlist { widgetlist
+colldet"1 upperlist { widgetlist_widget_
 )
 
 colldet =: verb define
