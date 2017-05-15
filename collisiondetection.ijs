@@ -106,8 +106,30 @@ time =. dist % v0
 )
 
 cd_disk_rectangle =: monad define
-object0 =. {.y
-object1 =. {:y
+obj0 =. {.y
+obj1 =. {:y
+
+if. type__obj0 = 'rectangle' do.
+ rect =. obj0
+ circ =. obj1 
+  else.
+ rect =. obj1
+ circ =. obj0
+end.
+
+cpos =. position__circ
+corners =. corners__rect
+
+rad =. radius__circ
+
+rvel =. velocity__rect
+cvel =. velocity__circ
+
+
+
+NB. Will need a separate case for corner collisions, can
+NB.  treat corner as a super super tiny circle to detect
+NB.  the collision.
 )
 
 cd_rectangle_disk =: cd_disk_rectangle
