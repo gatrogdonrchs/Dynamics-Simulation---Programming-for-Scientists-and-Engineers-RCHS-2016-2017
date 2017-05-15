@@ -5,15 +5,15 @@ coinsert 'jgl2'
 
 CANVAS =: 0 : 0
 pc canvas;
-minwh 1200 900;cc canvasisi isidraw;
+minwh 1200 600;cc canvasisi isidraw;
 cc xcord edit;
 cc ycord edit;
 cc xvelo edit;
 cc yvelo edit;
 cc createball button;
+cc createbox button;
 cc start button;
 cc stop button;
-cc createbox button;
 cc destroyallballs button;
 bin z;
 bin z; 
@@ -24,11 +24,13 @@ NB. Execute the form
 canvas_run =: monad define
 wd CANVAS
 wd'pshow'
+wd'timer 20'
 )
 
 NB. Close the window
 canvas_close =: monad define
 wd'pclose;'
+wd'timer 0'
 )
 
 canvas_cancel =: canvas_close
@@ -55,6 +57,7 @@ NB. Subclasses of widgets are disks, rectangles, etc.
 
 cocurrent 'widget'
 
+
 widgetlist =: 0$a:
 
 create =: verb define
@@ -68,7 +71,7 @@ codestroy''
 
 NB. Methods common to all widgets
 getwidget =: verb define
-y{(widgetlist_widget)
+y{(widgetlist_widget_)
 )
 
 setvelocity =: verb define
@@ -91,12 +94,8 @@ setrotation =: verb define
 rotation =: y
 )
 
-setmass =: verb define
-mass =: y
-)
-
-getmass =: verb define
-mass
+getrotation =: verb define
+rotation =:
 )
 
 setavelocity =: verb define
@@ -107,12 +106,27 @@ getavelocity =: verb define
 avelocity
 )
 
+setmass =: verb define
+mass =: y
+)
+
+getmass =: verb define
+mass
+)
+
 setgraphrep =: verb define
 )
 
 NB. ******************** disks ******************
 cocurrent 'disk'
 coinsert 'widget'
+
+create =: verb define
+create_widget_ f. y
+)
+destroy =: verb define
+destroy_widget_ f. ''
+)
 
 setradius =: verb define
 radius =: y
@@ -122,6 +136,10 @@ getradius =: verb define
 radius
 )
 
+NB. ******************** polygons **********************
+cocurrent 'poly'
+coinsert 'widget'
+
 create =: verb define
 create_widget_ f. y
 )
@@ -129,19 +147,12 @@ destroy =: verb define
 destroy_widget_ f. ''
 )
 
-cocurrent 'poly'
-coinsert 'widget'
+setcorners =: verb define
+corners =: y
+)
 
-
-canvas_createbox_button =: verb define
-glsel canvasisi
-glbrush glrgb (244 89 66)
-glpen 2 0 [  glrgb (244 89 66)
-glpolygon (0 0),(5 0),(5 600),(0 600)
-glpolygon (0 0),(1200 0),(1200 5),(0 5)
-glpolygon (0 600),(1200 600),(1200 595),(0 595)
-glpolygon (1200 0),(1195 0),(1195 600),(1200 600)
-glpaintx''
+getcorners =: verb define
+corners
 )
 
 cocurrent 'base'
@@ -208,23 +219,52 @@ glbrush glrgb 3#196
 glpen 2 0 [  glrgb 3#128
 glellipse (getposition__newball''),(100 100)
 glpaintx''
+
 )
 
 canvas_destroyallballs_button =: verb define
-destroy inlocalesv widgetlist_disk_''
-glsel 'canvasisi'
+destroy inlocalesv widgetlist_widget_''
+glsel canvasisi
 glclear''
+)
+
+
+canvas_createbox_button =: verb define
+
+wall1 =: '' conew 'poly'
+wall2 =: '' conew 'poly'
+wall3 =: '' conew 'poly'
+wall4 =: '' conew 'poly'
+
+setcorners__wall1 (0 0),(5 0),(5 600),(0 600)
+
+setcorners__wall2 (0 0),(1200 0),(1200 5),(0 5)
+
+setcorners__wall3 (0 600),(1200 600),(1200 595),(0 595)
+
+setcorners__wall4 (1200 0),(1195 0),(1195 600),(1200 600)
+
+glsel canvasisi
+glbrush glrgb (244 89 66)
+glpen 2 0 [  glrgb (244 89 66)
+glpolygon (getcorners__wall1'')
+glpolygon (getcorners__wall2'')
+glpolygon (getcorners__wall3'')
+glpolygon (getcorners__wall4'')
 glpaintx''
 )
+
+
+
 
 NB. Run a timestep of length y
 NB. Update positions & velocities
 NB. runstep =: verb define
 NB. set up a try/catch at some point
 sys_timer =: verb define
-try.
 cp =: getposition inlocalesv (widgetlist_disk_)''
 cv =: getvelocity inlocalesv (widgetlist_disk_)''
+try.
 setposition inlocalesc widgetlist_disk_ (cp+cv)
 glsel canvasisi
 glclear''
@@ -234,21 +274,15 @@ for_objnum. i. 0{($(getposition inlocalesv widgetlist_disk_'')) do.
 pos =: (<:objnum){(getposition inlocalesv widgetlist_disk_'')
 glellipse pos,(100,100)
 end.
-glbrush glrgb (244 89 66)
-glpen 2 0 [  glrgb (244 89 66)
-glpolygon (0 0),(5 0),(5 600),(0 600)
-glpolygon (0 0),(1200 0),(1200 5),(0 5)
-glpolygon (0 600),(1200 600),(1200 595),(0 595)
-glpolygon (1200 0),(1195 0),(1195 600),(1200 600)
 glpaintx''
 catch.
+smoutput 'gl error'
 wd 'timer 0'
-smoutput 'error in systimer'
 end.
 )
 
-
 sys_timer_z_ =: sys_timer_base_
+
 canvas_start_button =: verb define
 wd 'timer 20'
 )
