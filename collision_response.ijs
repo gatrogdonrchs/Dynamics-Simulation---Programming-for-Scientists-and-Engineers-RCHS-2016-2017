@@ -69,6 +69,45 @@ setvelocity__disk1 v1p
 setvelocity__disk2 v2p
 )
 
+disk_disk2 =: monad define
+disk1 =: 0 { y
+disk2 =: 1 { y
+
+xy1 =: getposition__disk1 ''
+x1 =: 0 { xy1
+y1 =: 1 { xy1
+xy2 =: getposition__disk2 ''
+x2 =: 0 { xy2
+y2 =: 1 { xy2
+v1 =: getvelocity__disk1 ''
+
+v2 =: getvelocity__disk2 ''
+
+m1 =: getmass__disk1 ''
+m2 =: getmass__disk2 ''
+
+dy =: y1 - y2
+dx =: x1 - x2
+angle =: _3 o. dy12 % dx12
+
+v1r =: (((2 o. angle) , (_1 * 1 o. angle)) ,: ((1 o. angle) , (2 o. angle))) +/ .* ,. v1
+v1x =: 0 { ,v1r
+v1y =: 1 { ,v1r
+v2r =: (((2 o. angle) , (_1 * 1 o. angle)) ,: ((1 o. angle) , (2 o. angle))) +/ .* v2
+v2x =: 0 { ,v2r
+v2y =: 1 { ,v2r
+
+
+v1xf =: (((m1 - m2) % (m1 + m2)) * v1x ) + (((2 * m2) % (m1 + m2)) * v2x)
+v2xf =: (((2 * m1) % (m1 + m2)) * v1x ) - (((m1 - m2) % (m1 + m2)) * v2x)
+
+invert =: _1 * angle
+v1f =: (((2 o. invert) , (_1 * 1 o. invert)) ,: ((1 o. invert) , (2 o. invert))) +/ .* ,. v1xf , v1y
+v2r =: (((2 o. invert) , (_1 * 1 o. invert)) ,: ((1 o. invert) , (2 o. invert))) +/ .* ,. v2xf , v2y
+
+setvelocity__disk1 v1f
+setvelocity__disk2 v2f
+)
 
 
 
