@@ -1,4 +1,4 @@
-NB. right now has sams keerthiks code but mohsins code is kinda broken testing it atm
+NB. right now has sams plus keerhtiks code mohsins code kinda works but everytime u do filter widgetlist_widget_ it creates more balls idk why
 require 'gl2'
 coinsert 'jgl2'
 
@@ -69,6 +69,14 @@ setavelocity =: verb define
 avelocity =: y
 )
 
+settype =: verb define
+type =: y
+)
+
+gettype =: verb define
+type
+)
+
 setmass =: verb define
 amass =: y
 )
@@ -85,6 +93,7 @@ name =: > 6 { (>0{y)
 size =: > 0 1 { (>0{y)
 position =: > 2 3 { (>0{y)
 velocity =: > 4 5 { (>0{y)
+type =: > 6 { (>0{y)
 )
 
 destroy =: verb define
@@ -109,9 +118,24 @@ set widgsel items "" "Create Widget";
 bin sz;
 bin h;
 )
-
 CREATEWIDGET =: 0 : 0
-pc builder;
+pc select;
+cc Disk button;set Disk wh 80 20;
+cc Rectangle button;set Rectangle wh 80 20;
+)
+
+select_Disk_button =: monad define
+wd CREATEDISK
+wd 'pshow'
+)
+
+select_Rectangle_button =: monad define
+wd CREATERECT
+wd 'pshow'
+)
+
+CREATEDISK =: 0 : 0
+pc disk;
 cc Name static;
 cc newname edit;set newname wh 80 20;
 bin sz;
@@ -137,8 +161,45 @@ cc "y:" static;
 cc newvely edit;set newvely wh 40 20;
 bin sz;
 bin h;
+cc "type:" static;
+cc newtype edit; set newtype wh 40 20;
+bin sz;
+bin h;
 cc Create button;set Create wh 50 20;
 )
+CREATERECT =: 0 : 0
+pc rect;
+cc "x:" static;
+cc tlx edit;set tlx wh 40 20;
+cc "y:" static;
+cc tly edit;set tly wh 40 20;
+bin sz;
+bin h;
+cc "x:" static;
+cc trx edit;set trx wh 40 20;
+cc "y:" static;
+cc try edit;set try wh 40 20;
+bin sz;
+bin h;
+cc "x:" static;
+cc blx edit;set blx wh 40 20;
+cc "y:" static;
+cc bly edit;set bly wh 40 20;
+bin sz;
+bin h;
+cc "x:" static;
+cc brx edit;set brx wh 40 20;
+cc "y:" static;
+cc bry edit;set bry wh 40 20;
+bin sz;
+bin h;
+cc "type:" static;
+cc newtype edit; set newtype wh 40 20;
+bin sz;
+bin h;
+cc Create button;set Create wh 50 20;
+)
+
 
 canvas_canvasisi_mmove =: monad define
 NB. Grabs the current coordinate of the mouse
@@ -163,10 +224,16 @@ wd 'pshow'
 end.
 )
 
+additems =: monad define
+wd 'psel canvas'
+items =: wd 'get widgsel allitems'
+wd 'set widgsel items ',(items),y
+)
+
 widgettable =: 0$a: 
 
-builder_Create_button =: monad define
-vars =: ((". newsizex);(". newsizey);(". newposx);(". newposy);(". newvelx);(". newvely);(newname));''
+disk_Create_button =: monad define
+vars =: ((". newsizex);(". newsizey);(". newposx);(". newposy);(". newvelx);(". newvely);(newname);(". newtype));''
 temp =: vars conew 'disk'
 newinfo =: <(getname__temp '');(getsize__temp '');(getposition__temp'');(getvelocity__temp '')
 widgettable =: widgettable , newinfo
@@ -179,8 +246,8 @@ wd'pclose;'
 )
 
 canvas_start_button =: verb define
-vars2 =: ((". newsizex);(". newsizey);(". newposx);(". newposy);(". newvelx);(". newvely);(newname));''
-temp2=: vars2 conew 'disk'
+vars2 =: ((". newsizex);(". newsizey);(". newposx);(". newposy);(". newvelx);(". newvely);(newname);(". newtype));''
+temp2 =: vars2 conew 'disk'
 newball =.	 '' conew 'disk'
 setposition__newball (". newposx),(". newposy)
 setvelocity__newball ((". newvelx)%300),((". newvely)%300)
@@ -205,11 +272,29 @@ wd'pclose;'
 
 canvas_cancel =: canvas_close
 
-builder_close =: monad define
+disk_close =: monad define
 wd 'pclose;'
 )
 
-builder_cancel =: builder_close
+select_close =: monad define
+wd 'pclose;'
+)
+
+select_cancel =: select_close
+
+disk_close =: monad define
+wd 'pclose;'
+)
+
+disk_cancel =: disk_close
+
+rect_close =: monad define
+wd 'pclose;'
+)
+
+rect_cancel =: rect_close
+
+disk_cancel =: disk_close
 
 NB. Run a timestep of length y
 NB. Update positions & velocities
@@ -299,51 +384,53 @@ glclear''
 )
 NB.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 filter =: monad define
-wlist =: i. $ y
-uppertri =: ;@:((,. i.)&.>)@:(i.&.<:)
+wlist =. i. $ y
+uppertri =. ;@:((,. i.)&.>)@:(i.&.<:)
 
-upperlist =: uppertri wlist
+upperlist =. uppertri wlist
 colldet"1 upperlist { widgetlist_widget_
 )
 
-colldet =: verb define
+colldet =. verb define
 
-NB.vars3 =: ((". newsizex);(". newsizey);(". newposx);(". newposy);(". newvelx);(". newvely);(newname));''
-NB.temp3 =: vars3 conew 'disk'
+vars3 =. ((". newsizex);(". newsizey);(". newposx);(". newposy);(". newvelx);(". newvely);(newname);(". newtype));''
+temp3 =. vars3 conew 'disk'
 
-obj0 =: {. y
-obj1 =: {: y
+obj0 =. {. y
+obj1 =. {: y
 
-vel0 =: getvelocity__obj0
-vel1 =: getvelocity__obj1
-veldiff =: | vel1 - vel0
+vel0 =. {. getvelocity inlocalesv widgetlist_disk_''
+vel1 =. {: getvelocity inlocalesv widgetlist_disk_''
+veldiff =. | vel1 - vel0
 speed =. %: (*: {.veldiff) + (*: {:veldiff)
 
 
-bpos0 =. getposition__obj0''
-bpos1 =. getposition__obj1''
+bpos0 =. {.getposition inlocalesv widgetlist_disk_''
+bpos1 =. {:getposition inlocalesv widgetlist_disk_''
 
-xs =: {. bpos0,.bpos1
-ys =: {: bpos0,.bpos1
+xs =. {. bpos0,.bpos1
+ys =. {: bpos0,.bpos1
 
-xdist =: -/ xs
-ydist =: -/ ys
-distsq =:   (*: xdist) + (*: ydist)
+xdist =. -/ xs
+ydist =. -/ ys
+distsq =.   (*: xdist) + (*: ydist)
 dist =: %: distsq
 
-div =: dist % speed
+div =. dist % speed
 
 if. (vel0 +. vel1) ~: 0 do. 
 
 else. if. (div < 20) do.
 
-('cd',type__obj0,type__obj1)~ obj0,obj1
+balinfo =. < gettype__temp3 ''
+doubleinfo =. doubleinfo , ballinfo
+('cd',({.doubleinfo),({:doubleinfo))~ obj0,obj1
 
 end.
 end.
 )
 
-cd_disk_disk =: monad define
+cd_disk_disk =. monad define
 disk0 =. {.y
 disk1 =. {:y
 
