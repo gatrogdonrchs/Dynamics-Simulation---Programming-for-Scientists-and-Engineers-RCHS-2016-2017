@@ -161,7 +161,23 @@ bin h;
 )
 
 CREATEWIDGET =: 0 : 0
-pc builder;
+pc select;
+cc Disk button;set Disk wh 80 20;
+cc Rectangle button;set Rectangle wh 80 20;
+)
+
+select_Disk_button =: monad define
+wd CREATEDISK
+wd 'pshow'
+)
+
+select_Rectangle_button =: monad define
+wd CREATERECT
+wd 'pshow'
+)
+
+CREATEDISK =: 0 : 0
+pc disk;
 cc Name static;
 cc newname edit;set newname wh 80 20;
 bin sz;
@@ -190,6 +206,35 @@ bin h;
 cc Create button;set Create wh 50 20;
 )
 
+CREATERECT =: 0 : 0
+pc rect;
+cc "x:" static;
+cc tlx edit;set tlx wh 40 20;
+cc "y:" static;
+cc tly edit;set tly wh 40 20;
+bin sz;
+bin h;
+cc "x:" static;
+cc trx edit;set trx wh 40 20;
+cc "y:" static;
+cc try edit;set try wh 40 20;
+bin sz;
+bin h;
+cc "x:" static;
+cc blx edit;set blx wh 40 20;
+cc "y:" static;
+cc bly edit;set bly wh 40 20;
+bin sz;
+bin h;
+cc "x:" static;
+cc brx edit;set brx wh 40 20;
+cc "y:" static;
+cc bry edit;set bry wh 40 20;
+bin sz;
+bin h;
+cc Create button;set Create wh 50 20;
+)
+
 canvas_widgsel_select =: monad define
 if. widgsel -: 'Create Widget' do.
 wd CREATEWIDGET
@@ -205,7 +250,7 @@ wd 'set widgsel items ',(items),y
 
 widgettable =: 0$a: 
 
-builder_Create_button =: monad define
+disk_Create_button =: monad define
 vars =: ((". newsizex);(". newsizey);(". newposx);(". newposy);(". newvelx);(". newvely);(newname));''
 temp =: vars conew 'disk'
 newinfo =: <(getname__temp '');(getsize__temp '');(getposition__temp'');(getvelocity__temp '')
@@ -232,11 +277,23 @@ wd'pclose;'
 
 canvas_cancel =: canvas_close
 
-builder_close =: monad define
+select_close =: monad define
 wd 'pclose;'
 )
 
-builder_cancel =: builder_close
+select_cancel =: select_close
+
+disk_close =: monad define
+wd 'pclose;'
+)
+
+disk_cancel =: disk_close
+
+rect_close =: monad define
+wd 'pclose;'
+)
+
+rect_cancel =: rect_close
 
 NB. Run a timestep of length y
 NB. Update positions & velocities
