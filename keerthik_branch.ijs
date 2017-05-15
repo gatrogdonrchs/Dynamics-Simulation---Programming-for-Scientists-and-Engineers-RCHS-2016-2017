@@ -91,12 +91,20 @@ setrotation =: verb define
 rotation =: y
 )
 
+setmass =: verb define
+mass =: y
+)
+
+getmass =: verb define
+mass
+)
+
 setavelocity =: verb define
 avelocity =: y
 )
 
-setmass =: verb define
-amass =: y
+getavelocity =: verb define
+avelocity
 )
 
 setgraphrep =: verb define
@@ -106,7 +114,13 @@ NB. ******************** disks ******************
 cocurrent 'disk'
 coinsert 'widget'
 
+setradius =: verb define
+radius =: y
+)
 
+getradius =: verb define
+radius
+)
 
 create =: verb define
 create_widget_ f. y
