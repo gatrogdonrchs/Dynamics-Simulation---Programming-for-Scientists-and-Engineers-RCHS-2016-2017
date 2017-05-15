@@ -40,13 +40,13 @@ div =. dist % speed
 
 NB. If both objects are stationary, don't bother operating on them.
 if. (vel0 +. vel1) ~: 0 do. 
-
+''
 NB. The 20 is the frame time, change if needed.
 else. if. (div < 20) do.
 
 NB. Calls the correct cd verb based on the widget types
 ('cd',type__obj0,type__obj1)~ obj0,obj1
-
+else. ''
 end.
 end.
 )
