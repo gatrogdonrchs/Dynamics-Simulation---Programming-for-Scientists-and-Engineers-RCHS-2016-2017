@@ -391,7 +391,7 @@ upperlist =. uppertri wlist
 colldet"1 upperlist { widgetlist_widget_
 )
 
-colldet =. verb define
+colldet =: verb define
 
 vars3 =. ((". newsizex);(". newsizey);(". newposx);(". newposy);(". newvelx);(". newvely);(newname);(". newtype));''
 temp3 =. vars3 conew 'disk'
