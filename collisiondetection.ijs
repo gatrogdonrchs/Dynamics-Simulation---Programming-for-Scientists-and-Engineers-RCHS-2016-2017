@@ -16,8 +16,8 @@ colldet =: verb define
 NB. must extract the position and velocity and radius
 NB.  of the widgets that have indexes y. then use those to
 NB.  find the time until the collision.
-obj0 =: {. y
-obj1 =: {: y
+obj0 =. {. y
+obj1 =. {: y
 
 vel0 =. velocity__obj0
 vel1 =. velocity__obj1
