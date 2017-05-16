@@ -117,13 +117,37 @@ if. type__obj0 = 'rectangle' do.
 end.
 
 cpos =. position__circ
+
+NB. Defined counter-clockwise
 corners =. corners__rect
+a =. 0{corners
+b =. 1{corners
+c =. 2{corners
+d =. 3{corners
+
+NB. counterclockwise vector rotation is (-y,x)
+
+NB. These are the four line segments/vectors that
+NB.  make up the rectangle
+ab =. a - b
+bc =. b - c
+cd =. c - d
+da =. d - a
+
+NB. The vectors perpendicular to each line segment
+na =. (1 | ab) * (_1 0)
+nb =. (1 | bc) * (_1 0)
+nc =. (1 | cd) * (_1 0)
+nd =. (1 | da) * (_1 0)
+ntable =. na,.nb,.nc,.nd
 
 rad =. radius__circ
 
 rvel =. velocity__rect
 cvel =. velocity__circ
 
+dotproduct =. +/@:*
+wallcheck =. ntable dotproduct"1 _ (cvel - rvel) 
 
 
 NB. Will need a separate case for corner collisions, can
