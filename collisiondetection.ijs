@@ -102,7 +102,6 @@ dist =. d - h
 
 NB. The time until the collision
 time =. dist % v0
-
 )
 
 cd_disk_rectangle =: monad define
