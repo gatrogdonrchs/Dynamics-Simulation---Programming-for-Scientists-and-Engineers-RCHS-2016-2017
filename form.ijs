@@ -156,6 +156,9 @@ cc start button;set start wh 20 20;cn "►";
 cc Step button;
 cc widgsel combolist;set widgsel wh 140 22;
 set widgsel items "" "Create Widget";
+cc wsize static;set wsize text Size:  x: y: ;
+cc wpos static;set wpos text Position:  x: y: ;
+cc wvel static;set wvel text Velocity:  x: y: ;
 bin sz;
 bin h;
 )
@@ -167,11 +170,13 @@ cc Rectangle button;set Rectangle wh 80 20;
 )
 
 select_Disk_button =: monad define
+wd'pclose;'
 wd CREATEDISK
 wd 'pshow'
 )
 
 select_Rectangle_button =: monad define
+wd'pclose;'
 wd CREATERECT
 wd 'pshow'
 )
@@ -242,10 +247,23 @@ wd 'pshow'
 end.
 )
 
+NB. Include in timerframe verb to display the info for selected widgets
+widginfo =: monad define
+wd 'psel canvas'
+goods =: > (I. widgsel -:"1 > 0{"1 >widgettable) { widgettable
+ssize =: > 1 { ,goods
+spos =: > 2 { ,goods
+svel =: > 3 { ,goods
+wd 'set wsize text Size: x: ',(0 { ssize),'y: '(1 { ssize)';'
+wd 'set wpos text Position:  x: ',(0 { spos)'y: ',(1 { spos)';'
+wd 'set wvel text Velocity:  x: ',(0 { svel)'y: ',(1 { svel)';'
+)
+
 additems =: monad define
 wd 'psel canvas'
 items =: wd 'get widgsel allitems'
 wd 'set widgsel items ',(items),y
+wd 'set widgsel select ',(": $ (<;._2 items) -. <'')
 )
 
 widgettable =: 0$a: 
@@ -255,7 +273,7 @@ vars =: ((". newsizex);(". newsizey);(". newposx);(". newposy);(". newvelx);(". 
 temp =: vars conew 'disk'
 newinfo =: <(getname__temp '');(getsize__temp '');(getposition__temp'');(getvelocity__temp '')
 widgettable =: widgettable , newinfo
-wd'pclose;'
+wd 'pclose;'
 additems newname
 glsel canvasisi
 glbrush glrgb 3#196
