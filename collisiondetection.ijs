@@ -149,6 +149,7 @@ cvel =. velocity__circ
 dotproduct =. +/@:*
 wallcheck =. ntable dotproduct"1 _ (cvel - rvel) 
 
+walls =. ((wallcheck >: 0) * (ntable)) -. 0
 
 NB. Will need a separate case for corner collisions, can
 NB.  treat corner as a super super tiny circle to detect
