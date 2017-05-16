@@ -281,3 +281,48 @@ NB. http://ericleong.me/research/circle-circle/#dynamic-static-circle-collision-
 NB. setvelocity inlocalesc widgetlist_disk_ (cv +"1 (0 0.196))
 NB. http://farside.ph.utexas.edu/teaching/301/lectures/node76.html
 NB. this literally has the equations we need.  Just rotate the frame, then rotate back
+
+
+
+shift_forward =: monad define
+
+NB. disk1 =: [wpw1] { widgetlist_widget_
+NB. disk2 =: [wpw2] { widgetlist_widget_
+NB. wpw means position of widget in collision with respect to widgetlist_widget_
+disk1 =:0 NB.0 { widgetlist_widget_
+rect1 =: 0 NB. 1 { widgetlist_widget_
+
+velocity2 =: 0 5 NB.getvelocity__disk1''
+
+posc =: 0 _10 NB.getposition__disk1''
+
+posedge =:0 0 NB.getposition__rect1''
+
+rotation =: 1p1%2 NB. getrotation__rect1''
+
+hyp =: %:(+/ (velocity2^2))
+
+angle12 =: (1p1%2) - rotation
+
+shiftedvelocity =: (hyp * (1&o.angle12)),(hyp * (2&o.angle12))
+NB. the shifted coordinate system. 
+
+smoutput shiftedvelocity
+
+)
+
+shift_back =: monad define
+
+disk1 =: 10
+rect1 =: 0
+rotation =: 1p1%4
+velocity2 =:0 5
+
+angle2 =: (1p1%2) - (rotation+ 1p1%4)
+
+veloc =: %:(+/(velocity2^2))
+shiftback =: (veloc * (1&o.angle2)),(veloc * (2&o.angle2))
+NB. the shifted coordinate system. 
+smoutput shiftback
+)
+
