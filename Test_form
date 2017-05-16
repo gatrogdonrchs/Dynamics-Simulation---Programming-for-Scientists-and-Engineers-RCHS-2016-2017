@@ -1,1 +1,18 @@
+canvas_close ''
+canvas_run ''
+canvas_createball_button ''
+canvas_createball_button ''
+
 disk1 =: 0 { widgetlist_disk_
+setposition__disk1 =: 100 100
+setvelocity__disk1 =: 10 _10
+setrotation__disk1 =: 0
+setavelocity__disk1 =: 0
+setmass__disk1 =: 1
+
+disk2 =: 1 { widgetlist_disk_
+setposition__disk2 =: 300 100
+setvelocity__disk2 =: _10 _10
+setrotation__disk2 =: 0
+setavelocity__disk2 =: 0
+setmass__disk2 =: 1
