@@ -266,6 +266,7 @@ cp =: getposition inlocalesv (widgetlist_disk_)''
 cv =: getvelocity inlocalesv (widgetlist_disk_)''
 try.
 setposition inlocalesc widgetlist_disk_ (cp+cv)
+ setvelocity inlocalesc widgetlist_disk_ (cv +"1 (0 0.196))
 glsel canvasisi
 glclear''
 glbrush glrgb 3#196
