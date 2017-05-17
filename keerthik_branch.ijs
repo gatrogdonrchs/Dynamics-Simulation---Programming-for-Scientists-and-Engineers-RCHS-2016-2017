@@ -24,7 +24,7 @@ NB. Execute the form
 canvas_run =: monad define
 wd CANVAS
 wd'pshow'
-wd'timer 20'
+wd'timer 0'
 )
 
 NB. Close the window
@@ -117,7 +117,16 @@ mass
 setgraphrep =: verb define
 )
 
+setid =: verb define
+id =: y
+)
+
+getid =: verb define
+id
+)
+
 NB. ******************** disks ******************
+NB. disks are id =: 1
 cocurrent 'disk'
 coinsert 'widget'
 
@@ -137,6 +146,7 @@ radius
 )
 
 NB. ******************** polygons **********************
+NB. polys are id =: 2
 cocurrent 'poly'
 coinsert 'widget'
 
@@ -214,6 +224,7 @@ canvas_createball_button =: verb define
 newball =. '' conew 'disk'
 setposition__newball (". xcord),(". ycord)
 setvelocity__newball ((". xvelo)%50),((". yvelo)%50)
+setid__newball 1
 glsel canvasisi
 glbrush glrgb 3#196
 glpen 2 0 [  glrgb 3#128
@@ -244,6 +255,22 @@ setcorners__wall3 (0 600),(1200 600),(1200 595),(0 595)
 
 setcorners__wall4 (1200 0),(1195 0),(1195 600),(1200 600)
 
+setposition__wall1 0
+setposition__wall2 0
+setposition__wall3 0
+setposition__wall4 0
+
+setvelocity__wall1 0
+setvelocity__wall2 0
+setvelocity__wall3 0
+setvelocity__wall4 0
+
+setid__wall1 2
+setid__wall2 2
+setid__wall3 2
+setid__wall4 2
+
+
 glsel canvasisi
 glbrush glrgb (244 89 66)
 glpen 2 0 [  glrgb (244 89 66)
@@ -262,26 +289,53 @@ NB. Update positions & velocities
 NB. runstep =: verb define
 NB. set up a try/catch at some point
 sys_timer =: verb define
+NB. use select. case. 1 case. 2 end
+NB. use gerund type dopoly`dodisk@.type'' 
+NB. when type=:0 dopoly is executed, vice versa
+try.
 cp =: getposition inlocalesv (widgetlist_disk_)''
 cv =: getvelocity inlocalesv (widgetlist_disk_)''
-try.
 setposition inlocalesc widgetlist_disk_ (cp+cv)
- setvelocity inlocalesc widgetlist_disk_ (cv +"1 (0 0.196))
 glsel canvasisi
 glclear''
+for_objnum. i. 0{($(getposition inlocalesv widgetlist_disk_'')) do.
+obj =: objnum { widgetlist_widget_
+oidd =: getid__obj''
+select. oidd
+case. 1 do.
+pos =: getposition__obj''
 glbrush glrgb 3#196
 glpen 2 0 [  glrgb 3#128
-for_objnum. i. 0{($(getposition inlocalesv widgetlist_disk_'')) do.
-pos =: (<:objnum){(getposition inlocalesv widgetlist_disk_'')
 glellipse pos,(100,100)
+case. 2 do.
+corns =: getcorners__obj''
+glbrush glrgb (244 89 66)
+glpen 2 0 [  glrgb (244 89 66)
+glpolygon corns
+end.
 end.
 glpaintx''
 catch.
-smoutput 'gl error'
-wd 'timer 0'
+smoutput 'timer error'
+timer '0'
 end.
 )
-
+noun define
+if. oidd = 1 do.
+pos =: getposition__obj''
+glbrush glrgb 3#196
+glpen 2 0 [  glrgb 3#128
+glellipse pos,(100,100)
+else. smoutput 'not a circle'
+end.
+if. oidd = 2 do.
+corns =: getcorners__obj''
+glbrush glrgb (244 89 66)
+glpen 2 0 [  glrgb (244 89 66)
+glpolygon corns
+else. smoutput 'not a rect'
+end.
+)
 sys_timer_z_ =: sys_timer_base_
 
 canvas_start_button =: verb define
@@ -291,6 +345,8 @@ wd 'timer 20'
 canvas_stop_button =: verb define
 wd 'timer 0'
 )
+
+wd 'timer 0'
 
 NB. When we load this file, create the form if it doesn't exist
 wd :: canvas_run 'psel canvas'
