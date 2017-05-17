@@ -1,0 +1,4 @@
+Bounding circle
+Check every frame/tick to see if the bounding circles are touching
+If a circle is moving faster than one radius per frame/tick we have to extrapolate
+-
