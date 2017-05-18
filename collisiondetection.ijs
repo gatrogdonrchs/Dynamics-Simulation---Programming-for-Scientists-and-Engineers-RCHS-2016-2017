@@ -133,13 +133,14 @@ ab =. a - b
 bc =. b - c
 cd =. c - d
 da =. d - a
+wtable =. ((ab,.bc),cd),da
 
 NB. The vectors perpendicular to each line segment
 na =. (1 | ab) * (_1 0)
 nb =. (1 | bc) * (_1 0)
 nc =. (1 | cd) * (_1 0)
 nd =. (1 | da) * (_1 0)
-ntable =. na,.nb,.nc,.nd
+ntable =. ((na,.nb),nc),nd
 
 rad =. radius__circ
 
@@ -147,9 +148,39 @@ rvel =. velocity__rect
 cvel =. velocity__circ
 
 dotproduct =. +/@:*
-wallcheck =. ntable dotproduct"1 _ (cvel - rvel) 
+wallcheck =. ((ntable dotproduct"1 _ (cvel - rvel)) >: 0) -. (0 0)
 
-walls =. ((wallcheck >: 0) * (ntable)) -. 0
+NB. The perpendicular vectors to the walls that were selected
+NB.  for possible collision
+selperpvecs =. (I. wallcheck) { ntable
+
+NB. The two wall vectors that were selected for possible
+NB.  collision
+selwalls =. (I.wallcheck) { wtable
+
+NB. The point between the two walls that were selected for
+NB.  possible collision
+collcor =. ({:(I. wallcheck)) { corners 
+
+NB. vector from the point "collcor" to the center of the
+NB.  circle
+q =. cpos - collcor
+
+
+perp0 =. {. selperpvecs
+perp1 =. {: selperpvecs
+divperp0 =. perp0 % (%: (*: {. perp0) + (*: {: perp0))  
+divperp1 =. perp1 % (%: (*: {. perp1) + (*: {: perp1))
+
+
+time0 =. ((q dotproduct divperp0) - r)  % (divperp0 dotproduct cvel)
+time1 =. ((q dotproduct divperp1) - r)  % (divperp1 dotproduct cvel)
+
+NB. Do the time and POC calculations for both possible walls,
+NB.  and take the one that is earlier if both produce a value
+NB.  from 0-1. If one does but not the other, take the wall w
+NB.  a value from 0-1. If both are out of the range of 0-1, 
+NB.  you must divert to calculate for a corner collision.
 
 NB. Will need a separate case for corner collisions, can
 NB.  treat corner as a super super tiny circle to detect
