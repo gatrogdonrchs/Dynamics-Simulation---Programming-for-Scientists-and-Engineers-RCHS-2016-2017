@@ -1,4 +1,4 @@
-NB. right now has sams plus keerhtiks code mohsins code kinda works but everytime u do filter widgetlist_widget_ it creates more balls idk why
+NB. Sam + Keerthik but you need high velocity to make it move
 require 'gl2'
 coinsert 'jgl2'
 
@@ -69,14 +69,13 @@ setavelocity =: verb define
 avelocity =: y
 )
 
-settype =: verb define
-type =: y
+setid =: verb define
+id =: y
 )
 
-gettype =: verb define
-type
+getid =: verb define
+id
 )
-
 setmass =: verb define
 amass =: y
 )
@@ -88,12 +87,7 @@ cocurrent 'disk'
 coinsert 'widget'
 
 create =: verb define
-create_widget_ f. (1{y)
-name =: > 6 { (>0{y)
-size =: > 0 1 { (>0{y)
-position =: > 2 3 { (>0{y)
-velocity =: > 4 5 { (>0{y)
-type =: > 6 { (>0{y)
+create_widget_ f. y
 )
 
 destroy =: verb define
@@ -114,33 +108,18 @@ cc Step button;
 cc positioon static;
 cc destroyallballs button;
 cc widgsel combolist;set widgsel wh 140 22;
-set widgsel items "" "Create Widget";
+set widgsel items "Create Disk" "Create Rect";
+cc default1 button;
+cc default2 button;
 bin sz;
 bin h;
-)
-CREATEWIDGET =: 0 : 0
-pc select;
-cc Disk button;set Disk wh 80 20;
-cc Rectangle button;set Rectangle wh 80 20;
-)
-
-select_Disk_button =: monad define
-wd CREATEDISK
-wd 'pshow'
-)
-
-select_Rectangle_button =: monad define
-wd CREATERECT
-wd 'pshow'
 )
 
 CREATEDISK =: 0 : 0
 pc disk;
-cc Name static;
-cc newname edit;set newname wh 80 20;
+cc Size static;
 bin sz;
 bin h;
-cc Size static;
 cc "x:" static;
 cc newsizex edit;set newsizex wh 40 20;
 cc "y:" static;
@@ -161,8 +140,8 @@ cc "y:" static;
 cc newvely edit;set newvely wh 40 20;
 bin sz;
 bin h;
-cc "type:" static;
-cc newtype edit; set newtype wh 40 20;
+cc "id:" static;
+cc id edit; set id wh 40 20;
 bin sz;
 bin h;
 cc Create button;set Create wh 50 20;
@@ -193,8 +172,8 @@ cc "y:" static;
 cc bry edit;set bry wh 40 20;
 bin sz;
 bin h;
-cc "type:" static;
-cc newtype edit; set newtype wh 40 20;
+cc "id:" static;
+cc id edit; set id wh 40 20;
 bin sz;
 bin h;
 cc Create button;set Create wh 50 20;
@@ -202,24 +181,25 @@ cc Create button;set Create wh 50 20;
 
 
 canvas_canvasisi_mmove =: monad define
-NB. Grabs the current coordinate of the mouse
+
 mousex =: 0 { (0 ". sysdata)
 mousey =: 1 { (0 ". sysdata)
 positioon =: mousex,mousey
-NB. Prevents an error if the user moves off the image
 
-NB.Grabs the coordinates of the mouse
-NB. Updates the coordinates and rgb value on the canvas
-NB. of the pixel that the mouse is on.
 wd'set positioon text "(',(":positioon),')";'
 
 )
 
 
 canvas_widgsel_select =: monad define
-if. widgsel -: 'Create Widget' do.
+if. widgsel -: 'Create Disk' do.
 smoutput 'Creating Widget...'
-wd CREATEWIDGET
+wd CREATEDISK
+wd 'pshow'
+end.
+if. widgsel -: 'Create Rect' do.
+smoutput 'Creating Widget...'
+wd CREATERECT
 wd 'pshow'
 end.
 )
@@ -233,30 +213,24 @@ wd 'set widgsel items ',(items),y
 widgettable =: 0$a: 
 
 disk_Create_button =: monad define
-vars =: ((". newsizex);(". newsizey);(". newposx);(". newposy);(". newvelx);(". newvely);(newname);(". newtype));''
-temp =: vars conew 'disk'
-newinfo =: <(getname__temp '');(getsize__temp '');(getposition__temp'');(getvelocity__temp '')
-widgettable =: widgettable , newinfo
+newball =. '' conew 'disk'
+setposition__newball (". newposx),(". newposy)
+setvelocity__newball ((". newvelx)%50),((". newvely)%50)
+setid__newball (". id)
 glsel canvasisi
 glbrush glrgb 3#196
 glpen 2 0 [  glrgb 3#128
-glellipse (getposition__temp''),(getsize__temp'')
+glellipse (getposition__newball''),((".newsizex),(".newsizey))
 glpaintx''
 wd'pclose;'
 )
 
-canvas_start_button =: verb define
-vars2 =: ((". newsizex);(". newsizey);(". newposx);(". newposy);(". newvelx);(". newvely);(newname);(". newtype));''
-temp2 =: vars2 conew 'disk'
-newball =.	 '' conew 'disk'
-setposition__newball (". newposx),(". newposy)
-setvelocity__newball ((". newvelx)%300),((". newvely)%300)
-glsel canvasisi
-glbrush glrgb 3#196
-glpen 2 0 [  glrgb 3#128
-glellipse (getposition__temp2''),(getsize__temp'')
-NB.glellipse (getposition__newball''),(newsizex,newsizey)
-glpaintx''
+canvas_default1_button =: monad define
+
+)
+
+canvas_default2_button =: monad define
+
 )
 
 NB. Execute the form
@@ -276,16 +250,6 @@ disk_close =: monad define
 wd 'pclose;'
 )
 
-select_close =: monad define
-wd 'pclose;'
-)
-
-select_cancel =: select_close
-
-disk_close =: monad define
-wd 'pclose;'
-)
-
 disk_cancel =: disk_close
 
 rect_close =: monad define
@@ -293,9 +257,6 @@ wd 'pclose;'
 )
 
 rect_cancel =: rect_close
-
-disk_cancel =: disk_close
-
 NB. Run a timestep of length y
 NB. Update positions & velocities
 NB. runstep =: verb define
@@ -383,102 +344,7 @@ glsel canvasisi
 glclear''
 )
 NB.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-filter =: monad define
-wlist =. i. $ y
-uppertri =. ;@:((,. i.)&.>)@:(i.&.<:)
-
-upperlist =. uppertri wlist
-colldet"1 upperlist { widgetlist_widget_
-)
-
-colldet =: verb define
-
-vars3 =. ((". newsizex);(". newsizey);(". newposx);(". newposy);(". newvelx);(". newvely);(newname);(". newtype));''
-temp3 =. vars3 conew 'disk'
-
-obj0 =. {. y
-obj1 =. {: y
-
-vel0 =. {. getvelocity inlocalesv widgetlist_disk_''
-vel1 =. {: getvelocity inlocalesv widgetlist_disk_''
-veldiff =. | vel1 - vel0
-speed =. %: (*: {.veldiff) + (*: {:veldiff)
-
-
-bpos0 =. {.getposition inlocalesv widgetlist_disk_''
-bpos1 =. {:getposition inlocalesv widgetlist_disk_''
-
-xs =. {. bpos0,.bpos1
-ys =. {: bpos0,.bpos1
-
-xdist =. -/ xs
-ydist =. -/ ys
-distsq =.   (*: xdist) + (*: ydist)
-dist =: %: distsq
-
-div =. dist % speed
-
-if. (vel0 +. vel1) ~: 0 do. 
-
-else. if. (div < 20) do.
-
-balinfo =. < gettype__temp3 ''
-doubleinfo =. doubleinfo , ballinfo
-('cd',({.doubleinfo),({:doubleinfo))~ obj0,obj1
-
-end.
-end.
-)
-
-cd_disk_disk =. monad define
-disk0 =. {.y
-disk1 =. {:y
-
-v0 =. velocity__disk0
-v1 =. velocity__disk1
-
-pos0 =. position__disk0
-pos1 =. position__disk1
-
-rad0 =. radius__disk0
-rad1 =. radius__disk1
-
-cop =. ((rad0*pos0) + (rad1*pos1)) % (rad0+rad1)
-
-rvec =. pos0 - cop
-
-magv0 =. %: (*: 0{v0) + (*: 1{v0)
-veldiv =.(v0 % magv0))
-
-d =. (-veldiv) +/@:* rvec 
-
-avec =. rvec + (d * veldiv)
-
-evec =. -avec
-h =. %: (*: rad0) - (*: evec)
-
-dist =. d - h 
-
-time =. dist % v0
-
-)
-
-cd_disk_rectangle =: monad define
-object0 =. {.y
-object1 =. {:y
-v0 =. velocity__disk0
-v1 =. velocity__disk1
-
-pos0 =. position__disk0
-pos1 =. position__disk1
-
-rad0 =. radius__disk0
-rad1 =. radius__disk1
-
-
-)
-
-cd_rectangle_disk =: cd_disk_rectangle
+NB.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 canvas_start_button =: verb define
 wd 'timer 60'
