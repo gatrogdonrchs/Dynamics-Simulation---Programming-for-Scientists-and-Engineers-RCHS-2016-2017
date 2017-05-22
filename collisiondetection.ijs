@@ -176,6 +176,21 @@ divperp1 =. perp1 % (%: (*: {. perp1) + (*: {: perp1))
 time0 =. ((q dotproduct divperp0) - r)  % (divperp0 dotproduct cvel)
 time1 =. ((q dotproduct divperp1) - r)  % (divperp1 dotproduct cvel)
 
+dist0 =. (time0 * cvel) + q + (r * divperp0)
+dist1 =. (time1 * cvel) + q + (r * divperp1)
+
+d0 =. {. selwalls
+d1 =. -{: selwalls
+dmagdiv0 =.d0 %  (%: (*: {. d0) + (*: {: d0))
+dmagdiv1 =.d1 %  (%: (*: {. d1) + (*: {: d1))
+
+
+edgecheck0  =. (({. selwalls) dotproduct perp0) % dmagdiv0
+edgecheck1  =. (({. selwalls) dotproduct perp1) % dmagdiv1
+
+
+
+
 NB. Do the time and POC calculations for both possible walls,
 NB.  and take the one that is earlier if both produce a value
 NB.  from 0-1. If one does but not the other, take the wall w
