@@ -1,6 +1,8 @@
-NB. Sam + Keerthik but you need high velocity to make it move
 require 'gl2'
 coinsert 'jgl2'
+NB. Changes these loads according to where ur other info is stored
+load 'C:\Users\Agil\j64-805-user\temp\Game\collision_response.ijs'
+load 'C:\Users\Agil\j64-805-user\temp\Game\collision_detection.ijs'
 
 NB. Dynamics simulation
 
@@ -215,7 +217,7 @@ widgettable =: 0$a:
 disk_Create_button =: monad define
 newball =. '' conew 'disk'
 setposition__newball (". newposx),(". newposy)
-setvelocity__newball ((". newvelx)%50),((". newvely)%50)
+setvelocity__newball ((". newvelx)),((". newvely))
 setid__newball (". id)
 glsel canvasisi
 glbrush glrgb 3#196
@@ -226,11 +228,27 @@ wd'pclose;'
 )
 
 canvas_default1_button =: monad define
-
+newball =. '' conew 'disk'
+setposition__newball (100),(300)
+setvelocity__newball ((4)),((0))
+setid__newball (1)
+glsel canvasisi
+glbrush glrgb 3#196
+glpen 2 0 [  glrgb 3#128
+glellipse (getposition__newball''),((300),(300))
+glpaintx''
 )
 
 canvas_default2_button =: monad define
-
+newball =. '' conew 'disk'
+setposition__newball (500),(300)
+setvelocity__newball ((-4)),((0))
+setid__newball (1)
+glsel canvasisi
+glbrush glrgb 3#196
+glpen 2 0 [  glrgb 3#128
+glellipse (getposition__newball''),((300),(300))
+glpaintx''
 )
 
 NB. Execute the form
