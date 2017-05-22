@@ -38,7 +38,7 @@ m2 =: getmass__disk2 ''
 dy12 =: y2 - y1
 dx12 =: x1 - x2
 angle12 =: arctan dx12, dy12
-anglev1 =: arctan v1
+anglev1 =: arctan (1 _1) * v1
 
 v1r =: (anglev1 -angle12) shift_forward v1
 v1x =: 0 { ,v1r
@@ -46,7 +46,7 @@ v1y =: 1 { ,v1r
 
 dy21 =: y1 - y2
 dx21 =: x2 - x1
-angle21 =: arctan dx21, dy21
+angle21 =: arctan dx21,  dy21)
 anglev2 =: anglev1
 
 v2r =: (anglev2 - angle21) shift_forward v2 
