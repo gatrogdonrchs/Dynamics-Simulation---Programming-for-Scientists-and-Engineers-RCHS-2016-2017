@@ -199,8 +199,11 @@ if.  1 = check0 *. check1 do.
 end.
 
 if. 0 = check0 +. check1 do.
-NB. This is a corner collision
+NB. This is a corner collision, make a circle with position
+NB.  collcor and velocity of rvel.
+cornerx =. (<collcor),(<rvel)
 
+cornerx cd_corner circ 
 
 end.
 
@@ -218,6 +221,18 @@ NB.  the collision.
 
 cd_rectangle_disk =: cd_disk_rectangle
 
+cd_corner =: dyad define
+NB. dyad where x is the position and velocity each boxed in a list 
+NB.  of the corner, y is the disk.
+corvel =. > {: x
+corpos =. > {. x
+circ =. y
+
+cvel =. velocity__circ
+cpos =. position__circ
+
+
+)
 
 NB. Rough filtering
 NB.  take sums of velocity vectors and distance between
