@@ -188,7 +188,21 @@ dmagdiv1 =.d1 %  (%: (*: {. d1) + (*: {: d1))
 edgecheck0  =. (({. selwalls) dotproduct perp0) % dmagdiv0
 edgecheck1  =. (({. selwalls) dotproduct perp1) % dmagdiv1
 
+check0 =. 1 = >. edgecheck0
+check1 =. 1 = >. edgecheck1
 
+if. (check0 *. check1) ~: (check0 +. check1) do.
+ (I. (check0,check1)) { (time0,time1)
+end.
+if.  1 = check0 *. check1 do.
+ time0 <. time1
+end.
+
+if. 0 = check0 +. check1 do.
+NB. This is a corner collision
+
+
+end.
 
 
 NB. Do the time and POC calculations for both possible walls,
