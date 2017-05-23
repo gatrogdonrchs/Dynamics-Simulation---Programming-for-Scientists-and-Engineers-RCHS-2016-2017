@@ -45,7 +45,11 @@ NB. The 20 is the frame time, change if needed.
 else. if. (div < 20) do.
 
 NB. Calls the correct cd verb based on the widget types
-('cd',type__obj0,type__obj1)~ obj0,obj1
+
+nametable =. (<' '),(<'disk'),(<'rectangle')
+name0 =. id__obj0 { nametable
+name1 =. id__obj1 { nametable
+('cd',name0,name1)~ obj0,obj1
 else. ''
 end.
 end.
@@ -110,7 +114,7 @@ cd_disk_rectangle =: monad define
 obj0 =. {.y
 obj1 =. {:y
 
-if. type__obj0 = 'rectangle' do.
+if. id__obj0 = 2 do.
  rect =. obj0
  circ =. obj1 
   else.
