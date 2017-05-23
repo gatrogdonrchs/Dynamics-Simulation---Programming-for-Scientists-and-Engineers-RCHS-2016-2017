@@ -113,6 +113,7 @@ cc widgsel combolist;set widgsel wh 140 22;
 set widgsel items "Create Disk" "Create Rect";
 cc default1 button;
 cc default2 button;
+cc testbounce button;
 bin sz;
 bin h;
 )
@@ -241,8 +242,8 @@ glpaintx''
 
 canvas_default2_button =: monad define
 newball =. '' conew 'disk'
-setposition__newball (500),(300)
-setvelocity__newball ((-4)),((0))
+setposition__newball (500),(700)
+setvelocity__newball ((0)),((-4))
 setid__newball (1)
 glsel canvasisi
 glbrush glrgb 3#196
@@ -278,6 +279,7 @@ rect_cancel =: rect_close
 NB. Run a timestep of length y
 NB. Update positions & velocities
 NB. runstep =: verb define
+
 sys_timer =: verb define
 cp =: getposition inlocalesv (widgetlist_widget_)''
 cv =: getvelocity inlocalesv (widgetlist_widget_)''
@@ -362,6 +364,9 @@ glsel canvasisi
 glclear''
 )
 NB.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+canvas_testbounce_button =: monad define
+disk_disk widgetlist_widget_
+)
 NB.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 canvas_start_button =: verb define
