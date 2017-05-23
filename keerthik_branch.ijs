@@ -234,6 +234,7 @@ newball =. '' conew 'disk'
 setposition__newball (". xcord),(". ycord),100,100
 setvelocity__newball ((". xvelo)%50),((". yvelo)%50),0,0
 setid__newball 1
+setbcparams__newball (getposition__newball'')
 glsel canvasisi
 glbrush glrgb 3#196
 glpen 2 0 [  glrgb 3#128
@@ -295,6 +296,7 @@ glpaintx''
 
 
 
+
 timerframe =: verb define
 glsel canvasisi
 glclear''
@@ -305,6 +307,7 @@ select. oidd
 case. 1 do.
 pos =: getposition__obj''
 vel =: getvelocity__obj''
+setvelocity__obj ((vel) +"1 (0 0.196 0 0))
 newpos =: pos + vel
 setposition__obj newpos
 glbrush glrgb 3#196
