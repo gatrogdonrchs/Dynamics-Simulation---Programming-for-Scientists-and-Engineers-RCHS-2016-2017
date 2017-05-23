@@ -101,7 +101,9 @@ NB.  the disk at the time of collision
 dist =. d - h 
 
 NB. The time until the collision
-time =. dist % v0
+settime =. dist % v0
+
+output =. (<settime),disk0,disk1
 )
 
 cd_disk_rectangle =: monad define
@@ -192,10 +194,12 @@ check0 =. 1 = >. edgecheck0
 check1 =. 1 = >. edgecheck1
 
 if. (check0 *. check1) ~: (check0 +. check1) do.
- (I. (check0,check1)) { (time0,time1)
+ settime =. (I. (check0,check1)) { (time0,time1)
+ output =. (<settime),circ,rect
 end.
 if.  1 = check0 *. check1 do.
- time0 <. time1
+ settime =. time0 <. time1
+ output =. (<settime),circ,rect
 end.
 
 if. 0 = check0 +. check1 do.
@@ -243,8 +247,8 @@ a =. r + (d * magdiv)
 e =. corpos - a
 h =. %: (*: crad) - (*: e)
 dist =. d - h
-time =. dist % veldiff
-
+settime =. dist % veldiff
+output =. (<settime),circ,rect
 )
 
 NB. Rough filtering
