@@ -25,8 +25,8 @@ veldiff =. | vel1 - vel0
 speed =. %: (*: {.veldiff) + (*: {:veldiff)
 
 
-bpos0 =. bpos__obj0
-bpos1 =. bpos__obj1
+bpos0 =. 0 1 { position__obj0
+bpos1 =. 0 1 { position__obj1
 
 xs =. {. bpos0,.bpos1
 ys =. {: bpos0,.bpos1
@@ -64,11 +64,11 @@ NB. Grab widget info needed for calculations
 v0 =. velocity__disk0
 v1 =. velocity__disk1
 
-pos0 =. position__disk0
-pos1 =. position__disk1
+pos0 =. 0 1 { position__disk0
+pos1 =. 0 1 { position__disk1
 
-rad0 =. radius__disk0
-rad1 =. radius__disk1
+rad0 =. -: 2 { radius__disk0
+rad1 =. -: 2 { radius__disk1
 
 NB. Find center of psuedomass
 NB. Here we say that the pseudomass is the same as  
@@ -107,7 +107,9 @@ dist =. d - h
 NB. The time until the collision
 settime =. dist % v0
 
-output =. (<settime),disk0,disk1
+collisiontype =. <0
+
+output =. (<settime),disk0,disk1,collisiontype
 )
 
 cd_disk_rectangle =: monad define
@@ -197,13 +199,15 @@ edgecheck1  =. (({. selwalls) dotproduct perp1) % dmagdiv1
 check0 =. 1 = >. edgecheck0
 check1 =. 1 = >. edgecheck1
 
+collisiontype =. <1
+
 if. (check0 *. check1) ~: (check0 +. check1) do.
  settime =. (I. (check0,check1)) { (time0,time1)
- output =. (<settime),circ,rect
+ output =. (<settime),circ,rect,collisiontype
 end.
 if.  1 = check0 *. check1 do.
  settime =. time0 <. time1
- output =. (<settime),circ,rect
+ output =. (<settime),circ,rect,collisiontype
 end.
 
 if. 0 = check0 +. check1 do.
@@ -253,7 +257,10 @@ e =. corpos - a
 h =. %: (*: crad) - (*: e)
 dist =. d - h
 settime =. dist % veldiff
-output =. (<settime),circ,rect
+
+collisiontype =. <1
+
+output =. (<settime),circ,rect,collisiontype
 )
 
 NB. Rough filtering
