@@ -67,8 +67,8 @@ v1 =. velocity__disk1
 pos0 =. 0 1 { position__disk0
 pos1 =. 0 1 { position__disk1
 
-rad0 =. -: 2 { radius__disk0
-rad1 =. -: 2 { radius__disk1
+rad0 =. -: 2 { position__disk0
+rad1 =. -: 2 { position__disk1
 
 NB. Find center of psuedomass
 NB. Here we say that the pseudomass is the same as  
