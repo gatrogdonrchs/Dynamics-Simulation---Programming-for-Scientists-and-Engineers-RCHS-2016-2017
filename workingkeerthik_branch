@@ -1,40 +1,17 @@
-NB. The verb "require" loads a script, and in this case it loads the 'gl2' script that contains useful graphics verbs
-NB. To view the gl2 script, one can execute (open 'gl2') in the ijx window
 require 'gl2'
-NB. The current locale, which can be viewed by executing (coname''), is the 'base' locale
-NB. Each locale has a path, which can be viewed by executing (copath'localename')
-NB. The coinsert verb inserts a new locale, the jgl2 locale shared among all branche, and places it right before the z locale 
-NB.    along the copath of base
 coinsert 'jgl2'
 
-NB. (0 : 0) Will define a name, in this case CANVAS, as a noun (0), and in placing the second 0, will state than any code below
-NB.   is part of the definition of that noun until a ) appears.  Similarly 3 : 0 does the same but for a verb.
-
-NB. The verb (pc), short for "parent create," creates a standard parent window, in this case with the name 'canvas'
-NB. "minwh" is a wd command that sets the minimum width and height of the standard parent window
-NB. A cc, or child class, creates a specific entity in the parental window, of which there are many types
-NB. (wd 'cc id isidraw') Creates a widget window which can be acted upon by gl2 commands (graphics commands)
-NB. In this case, the widget is named 'canvasisi'
-
-NB. Creates edit windows (a type of child class) with the names of xcord, ycord, xvelo, and yvelo
-NB. Creates buttons (a type of child class) with the names of createball, start, and stop
-NB. bins are "invisible two-dimensional containers" which can contain child controls or other pins
-NB. Widgets are automatically stacked vertically in a bin unless commands such as 'binh" or "binv" are used
-NB.  bin z ends a specific bin, in this case the bin with all of the buttons and edits
-
-NB. The wd 'pas' command adjusts the parental size to create margins
-NB.   in this case, the left and top margins are both 6, and the right/bottom margins will automatically be
-NB.   the same as the left and top margins
+	
 
 CANVAS =: 0 : 0
 pc canvas;
-minwh 1200 900;
-cc canvasisi isidraw;
+minwh 1200 600;cc canvasisi isidraw;
 cc xcord edit;
 cc ycord edit;
 cc xvelo edit;
 cc yvelo edit;
 cc createball button;
+cc createbox button;
 cc start button;
 cc stop button;
 cc destroyallballs button;
@@ -45,24 +22,31 @@ pas 6 6;
 
 NB. Execute the form
 canvas_run =: monad define
-NB. The (wd) command sends commands to the windows driver
-NB. It's arguments must be separated by semicolons
-NB. By running (wd CANVAS), the entire CANVAS noun is run as many arguments sent to the window driver 
 wd CANVAS
-NB. Displays the current graphics window on the screen
-wd 'pshow'
+wd'pshow'
+wd'timer 20'
 )
 
 NB. Close the window
 canvas_close =: monad define
-NB. Closes the parent window.  'pclose' is essentially the opposite command of 'pshow'
 wd'pclose;'
+wd'timer 0'
 )
 
-NB. The canvas_cancel verb will do the exact same thing as the canvas_close verb
 canvas_cancel =: canvas_close
 
+
+
+
+
+
 NB. Dynamics simulation
+
+NB. Calculate length of next time step
+NB. For each pair of objects, find out how long till they collide
+NB. Result is time to next collision
+calctimestep =: verb define
+)
 
 NB. Widgets
 NB. A widget represents a physical object
@@ -70,103 +54,120 @@ NB. It has a graphical representation and a mathematical representation
 
 NB. Subclasses of widgets are disks, rectangles, etc.
 
-NB. Sets the locale to the widget locale, under which new widgets can be created and defined
+
 cocurrent 'widget'
 
-NB. Sets the widgetlist to a boxed list with zero boxes
-NB. The noun "a:" creates an empty box, so create a list with zero of those empty boxes
+
 widgetlist =: 0$a:
 
-NB. Creates a new widget as part of the widgetlist
 create =: verb define
-NB. Since widgetlist_widget_ is a boxed list, and coname'' produces the name of the current locale, it adds the name of the 
-NB.   current locale as an additional box in that widget list
 widgetlist_widget_ =: widgetlist_widget_ , coname''
 )
 
-NB. Destroys all widgets
 destroy =: verb define
-NB. Removes all boxes in widgetlist_widget_ that contain the same name as the current locale name
-NB. For example, if the current locale is 'disk' destroy all boxes in widgetlist_widget_ containing the word disk
 widgetlist_widget_ =: widgetlist_widget_ -. coname''
-NB. Destroys/wipes the current locale
 codestroy''
 )
 
 NB. Methods common to all widgets
-NB. In other words, these verbs are defined in the widget locale and can therefore be run on any type of widget
-NB. This is because subsequent locales such as 'disk' will include the widget locale in their copath 
-
-NB. When given an index takes a particular widget in the widgetlist using that index
-NB. Ex. If y is "1" takes 1 { widgetlist_widget_, which would be the second widget that was created
 getwidget =: verb define
 y{(widgetlist_widget_)
 )
 
-NB. Sets the velocity to the input value given
 setvelocity =: verb define
 velocity =: y
 )
 
-NB. Output is the velocity value; must be run after setvelocity has been run
 getvelocity =: verb define
 velocity
 )
 
-NB. Sets the position to the input value given
 setposition =: verb define
 position =: y
 )
 
-NB. Output is the position value; must be run after setposition has been run
 getposition =: verb define
 position
 )
 
-NB. Sets the rotation to the input value given
 setrotation =: verb define
 rotation =: y
 )
 
-NB. Sets the angular velocity to the input value given 
+getrotation =: verb define
+rotation =:
+)
+
 setavelocity =: verb define
 avelocity =: y
 )
 
-NB. Sets the mass to the input value given
+getavelocity =: verb define
+avelocity
+)
+
 setmass =: verb define
 mass =: y
+)
+
+getmass =: verb define
+mass
 )
 
 setgraphrep =: verb define
 )
 
+setid =: verb define
+id =: y
+)
+
+getid =: verb define
+id
+)
 
 NB. ******************** disks ******************
-
-NB. Changes the current locale to the disk locale
+NB. disks are id =: 1
 cocurrent 'disk'
-NB. Inserts the widget locale into the copath of the disk locale
-NB. This is important because it allows verbs defined in the widget locale to be run while in the disk locale
 coinsert 'widget'
 
-NB. The f. adverb will run the create verb, as it is defined in the widget locale, 
-NB.   via applying it to the current locale (in this case disk)
 create =: verb define
 create_widget_ f. y
 )
-
-NB. Use the f. adverb to run the destroy verb within the disk locale
 destroy =: verb define
 destroy_widget_ f. ''
 )
 
-NB. Change the current locale to base, so that these verbs will be defined in the base locale
+setradius =: verb define
+radius =: y
+)
+
+getradius =: verb define
+radius
+)
+
+NB. ******************** polygons **********************
+NB. polys are id =: 2
+cocurrent 'poly'
+coinsert 'widget'
+
+create =: verb define
+create_widget_ f. y
+)
+destroy =: verb define
+destroy_widget_ f. ''
+)
+
+setcorners =: verb define
+corners =: y
+)
+
+getcorners =: verb define
+corners
+)
+
 cocurrent 'base'
-NB. Require graphics verbs in the gl2 script and insert the jgl2 locale (we use for the project) into the base copath
 require 'gl2'
 coinsert 'jgl2'
-
 
 inlocalesc =: 2 : 0
 cocurrent =. 18!:4
@@ -219,35 +220,17 @@ cocurrent i
 res
 )
 
-NB. Creates a new disk/ball on the graphics screen
 canvas_createball_button =: verb define
-NB. conew creates a new locale/widget class, in this case with the name of disk
-NB. The '' to the left of conew can be replaced with creation parameters under other circumstances
-NB. Assign this newly created locale/widget under the name newball
-newball =.	 '' conew 'disk'
-NB. The __ shows that the setposition verb will be run within the newball locale 
-NB. Sets the position_newball_ value to the xcord and ycord numbers that are typed into the respective edit boxes on the graphics screen
-setposition__newball (". xcord),(". ycord)
-NB. Sets the velocity_newball_ value to the xvelo and yvelo numbers that are typed into the respective edit boxes on the graphics screen
-setvelocity__newball ((". xvelo)%50),((". yvelo)%50)
-NB. "glsel" selects the current window/class on which to operate graphics commands
-NB. In this case we are operating on the canvaisi graphics window we created under the CANVAS noun
+newball =. '' conew 'disk'
+setposition__newball (". xcord),(". ycord),100,100
+setvelocity__newball ((". xvelo)%50),((". yvelo)%50),0,0
+setid__newball 1
 glsel canvasisi
-NB. Within canvasisi, use glbrush to set the brush color
-NB. This color is defined using the glrgb command, which uses the 3#
 glbrush glrgb 3#196
 glpen 2 0 [  glrgb 3#128
-glellipse (getposition__newball''),(100 100)
+glellipse (getposition__newball'')
 glpaintx''
-)
 
-canvas_createbox_button =: verb define
-newbox =.	 '' conew 'poly'
-glsel canvasisi
-glbrush glrgb 3#196
-glpen 2 0 [  glrgb 3#128
-glpolygon (100 100),(200 200),(200 100),(100 200)
-glpaintx''
 )
 
 canvas_destroyallballs_button =: verb define
@@ -256,32 +239,127 @@ glsel canvasisi
 glclear''
 )
 
+
+canvas_createbox_button =: verb define
+
+wall1 =: '' conew 'poly'
+wall2 =: '' conew 'poly'
+wall3 =: '' conew 'poly'
+wall4 =: '' conew 'poly'
+
+setcorners__wall1 (0 0),(5 0),(5 600),(0 600)
+setcorners__wall2 (0 0),(1200 0),(1200 5),(0 5)
+setcorners__wall3 (0 600),(1200 600),(1200 595),(0 595)
+setcorners__wall4 (1200 0),(1195 0),(1195 600),(1200 600)
+
+setid__wall1 2
+setid__wall2 2
+setid__wall3 2
+setid__wall4 2
+
+setmass__wall1 _
+setmass__wall2 _
+setmass__wall3 _
+setmass__wall4 _
+
+NB. glrgba for bounding circle set a to be 255
+NB. bounding circle calculations
+NB. 4 billion away
+wall1bc =: '' conew 'disk'
+wall2bc =: '' conew 'disk'
+wall3bc =: '' conew 'disk'
+wall4bc =: '' conew 'disk'
+
+setposition__wall1bc =: ((_1*(2^32)),300,(2^32),(2^32))
+setposition__wall2bc =: (600,(2^32),(2^32),(2^32))
+setposition__wall3bc =: ((2^32),300,(2^32),(2^32))
+setposition__wall4bc =: (600,(_1*(2^32)),(2^32),(2^32))
+
+setid__wall1bc  3
+setid__wall2bc  3
+setid__wall3bc  3
+setid__wall4bc  3
+
+glsel canvasisi
+glbrush glrgb (244 89 66)
+glpen 2 0 [  glrgb (244 89 66)
+glpolygon (getcorners__wall1'')
+glpolygon (getcorners__wall2'')
+glpolygon (getcorners__wall3'')
+glpolygon (getcorners__wall4'')
+glbrush glrgba (150 244 89 66)
+glpen 2 0 [ glrgba (150 244 89 66)
+glellipse  getposition__wall1bc
+glellipse  getposition__wall1bc
+glellipse  getposition__wall1bc
+glellipse  getposition__wall1bc
+glpaintx''
+)
+
+
+
+
 NB. Run a timestep of length y
 NB. Update positions & velocities
 NB. runstep =: verb define
 NB. set up a try/catch at some point
 sys_timer =: verb define
-cp =: getposition inlocalesv (widgetlist_widget_)''
-cv =: getvelocity inlocalesv (widgetlist_widget_)''
-setposition inlocalesc widgetlist_widget_ (cp+cv)
-setvelocity inlocalesc widgetlist_widget_ (cv + (0, 0.196))
+NB. use select. case. 1 case. 2 end
+NB. use gerund type dopoly`dodisk@.type'' 
+NB. when type=:0 dopoly is executed, vice versa
 try.
 glsel canvasisi
 glclear''
+for_objnum. i. 0{($(getid inlocalesv widgetlist_disk_'')) do.
+obj =: objnum { widgetlist_widget_
+oidd =: getid__obj''
+if. oidd = 1 do.
+pos =: getposition__obj''
+vel =: getvelocity__obj''
+newpos =: pos + vel
 glbrush glrgb 3#196
 glpen 2 0 [  glrgb 3#128
-for_objnum. i. 0{($(getposition inlocalesv widgetlist_widget_'')) do.
-pos =: (<:objnum){(getposition inlocalesv widgetlist_widget_'')
-glellipse pos,(100,100)
+glellipse newpos,(100,100)
+end.
+if. oidd = 2 do.
+corns =: getcorners__obj''
+glbrush glrgb (244 89 66)
+glpen 2 0 [  glrgb (244 89 66)
+glpolygon corns
+end.
+if. oidd = 3 do.
+bcpos =: getposition__obj''
+glbrush glargb 4#196
+glpen 2 0 [  glrgb 4#128
+glellipse bcpos
+end.
 end.
 glpaintx''
 catch.
-smoutput 'gl error'
+smoutput 'timer error'
 wd 'timer 0'
 end.
 )
 
+noun define
+if. oidd = 1 do.
+pos =: getposition__obj''
+glbrush glrgb 3#196
+glpen 2 0 [  glrgb 3#128
+glellipse pos,(100,100)
+else. smoutput 'not a circle'
+end.
+if. oidd = 2 do.
+corns =: getcorners__obj''
+glbrush glrgb (244 89 66)
+glpen 2 0 [  glrgb (244 89 66)
+glpolygon corns
+else. smoutput 'not a rect'
+end.
+)
+
 sys_timer_z_ =: sys_timer_base_
+
 canvas_start_button =: verb define
 wd 'timer 20'
 )
@@ -289,6 +367,8 @@ wd 'timer 20'
 canvas_stop_button =: verb define
 wd 'timer 0'
 )
+
+
 
 NB. When we load this file, create the form if it doesn't exist
 wd :: canvas_run 'psel canvas'
