@@ -225,6 +225,7 @@ NB.  the collision.
 
 cd_rectangle_disk =: cd_disk_rectangle
 
+
 cd_corner =: dyad define
 NB. dyad where x is the position and velocity each boxed in a list 
 NB.  of the corner, y is the disk.
