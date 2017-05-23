@@ -44,6 +44,14 @@ getvelocity =: verb define
 velocity
 )
 
+setavelocity =: verb define
+avelocity =: y
+)
+
+getavelocity =: verb define
+avelocity
+)
+
 setposition =: verb define
 position =: y
 )
@@ -80,10 +88,11 @@ coinsert 'widget'
 
 create =: verb define
 create_widget_ f. (1{y)
-name =: > 6 { (>0{y)
+name =: > 7 { (>0{y)
 size =: > 0 1 { (>0{y)
 position =: > 2 3 { (>0{y)
 velocity =: > 4 5 { (>0{y)
+avelocity =: > 6 { (>0{y)
 )
 
 destroy =: verb define
@@ -159,6 +168,7 @@ set widgsel items "" "Create Widget";
 cc wsize static;set wsize text Size:  x: y: ;
 cc wpos static;set wpos text Position:  x: y: ;
 cc wvel static;set wvel text Velocity:  x: y: ;
+cc wavel static;set wavel text Angular Velocity: ;
 bin sz;
 bin h;
 )
@@ -208,6 +218,10 @@ cc "y:" static;
 cc newvely edit;set newvely wh 40 20;
 bin sz;
 bin h;
+cc "AngularVelocity:" static;
+cc newavel edit;set newavel wh 40 20;
+bin sz;
+bin h;
 cc Create button;set Create wh 50 20;
 )
 
@@ -254,9 +268,11 @@ goods =: > (I. widgsel -:"1 > 0{"1 >widgettable) { widgettable
 ssize =: > 1 { ,goods
 spos =: > 2 { ,goods
 svel =: > 3 { ,goods
+savel =: > 4 { ,goods
 wd 'set wsize text Size: x: ',(0 { ssize),'y: '(1 { ssize)';'
 wd 'set wpos text Position:  x: ',(0 { spos)'y: ',(1 { spos)';'
 wd 'set wvel text Velocity:  x: ',(0 { svel)'y: ',(1 { svel)';'
+wd 'set wavel text Angular Velocity:  ',savel';'
 )
 
 additems =: monad define
@@ -269,9 +285,9 @@ wd 'set widgsel select ',(": $ (<;._2 items) -. <'')
 widgettable =: 0$a: 
 
 disk_Create_button =: monad define
-vars =: ((". newsizex);(". newsizey);(". newposx);(". newposy);(". newvelx);(". newvely);(newname));''
+vars =: ((". newsizex);(". newsizey);(". newposx);(". newposy);(". newvelx);(". newvely);(". newavel);(newname));''
 temp =: vars conew 'disk'
-newinfo =: <(getname__temp '');(getsize__temp '');(getposition__temp'');(getvelocity__temp '')
+newinfo =: <(getname__temp '');(getsize__temp '');(getposition__temp'');(getvelocity__temp '');(getavelocity__temp '')
 widgettable =: widgettable , newinfo
 wd 'pclose;'
 additems newname
