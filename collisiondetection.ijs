@@ -230,7 +230,20 @@ circ =. y
 
 cvel =. velocity__circ
 cpos =. position__circ
+crad =. radius__circ
 
+veldiff =. cvel - corvel
+magdiv =. veldiff % (%: (*: {. veldiff) + (*: {: veldiff))
+
+dotproduct =. +/@:*
+
+r =. cpos - corpos
+d =. (-magdiv) dotproduct r
+a =. r + (d * magdiv)
+e =. corpos - a
+h =. %: (*: crad) - (*: e)
+dist =. d - h
+time =. dist % veldiff
 
 )
 
