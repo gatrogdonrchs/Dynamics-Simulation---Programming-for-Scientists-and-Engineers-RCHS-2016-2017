@@ -24,7 +24,7 @@ NB. Execute the form
 canvas_run =: monad define
 wd CANVAS
 wd'pshow'
-wd'timer 0'
+wd'timer 20'
 )
 
 NB. Close the window
@@ -125,6 +125,14 @@ getid =: verb define
 id
 )
 
+setbcparams =: verb define
+bcparams =: y
+)
+
+getbcparams =: verb define
+bcparams
+)
+
 NB. ******************** disks ******************
 NB. disks are id =: 1
 cocurrent 'disk'
@@ -144,6 +152,7 @@ radius =: y
 getradius =: verb define
 radius
 )
+
 
 NB. ******************** polygons **********************
 NB. polys are id =: 2
@@ -222,13 +231,13 @@ res
 
 canvas_createball_button =: verb define
 newball =. '' conew 'disk'
-setposition__newball (". xcord),(". ycord)
-setvelocity__newball ((". xvelo)%50),((". yvelo)%50)
+setposition__newball (". xcord),(". ycord),100,100
+setvelocity__newball ((". xvelo)%50),((". yvelo)%50),0,0
 setid__newball 1
 glsel canvasisi
 glbrush glrgb 3#196
 glpen 2 0 [  glrgb 3#128
-glellipse (getposition__newball''),(100 100)
+glellipse (getposition__newball'')
 glpaintx''
 
 )
@@ -248,28 +257,29 @@ wall3 =: '' conew 'poly'
 wall4 =: '' conew 'poly'
 
 setcorners__wall1 (0 0),(5 0),(5 600),(0 600)
-
 setcorners__wall2 (0 0),(1200 0),(1200 5),(0 5)
-
 setcorners__wall3 (0 600),(1200 600),(1200 595),(0 595)
-
 setcorners__wall4 (1200 0),(1195 0),(1195 600),(1200 600)
-
-setposition__wall1 0
-setposition__wall2 0
-setposition__wall3 0
-setposition__wall4 0
-
-setvelocity__wall1 0
-setvelocity__wall2 0
-setvelocity__wall3 0
-setvelocity__wall4 0
 
 setid__wall1 2
 setid__wall2 2
 setid__wall3 2
 setid__wall4 2
 
+setmass__wall1 _
+setmass__wall2 _
+setmass__wall3 _
+setmass__wall4 _
+
+NB. glrgba for bounding circle set a to be 255
+NB. bounding circle calculations
+NB. 4 billion away
+
+
+setbcparams__wall1 =: ((_1*(2^32)),300,(2^32),(2^32))
+setbcparams__wall2 =: (600,(2^32),(2^32),(2^32))
+setbcparams__wall3 =: ((2^32),300,(2^32),(2^32))
+setbcparams__wall4 =: (600,(_1*(2^32)),(2^32),(2^32))
 
 glsel canvasisi
 glbrush glrgb (244 89 66)
@@ -278,35 +288,28 @@ glpolygon (getcorners__wall1'')
 glpolygon (getcorners__wall2'')
 glpolygon (getcorners__wall3'')
 glpolygon (getcorners__wall4'')
+glbrush glrgba (150 244 89 66)
+glpen 2 0 [ glrgba (150 244 89 66)
 glpaintx''
 )
 
 
 
-
-NB. Run a timestep of length y
-NB. Update positions & velocities
-NB. runstep =: verb define
-NB. set up a try/catch at some point
-sys_timer =: verb define
-NB. use select. case. 1 case. 2 end
-NB. use gerund type dopoly`dodisk@.type'' 
-NB. when type=:0 dopoly is executed, vice versa
-try.
-cp =: getposition inlocalesv (widgetlist_disk_)''
-cv =: getvelocity inlocalesv (widgetlist_disk_)''
-setposition inlocalesc widgetlist_disk_ (cp+cv)
+timerframe =: verb define
 glsel canvasisi
 glclear''
-for_objnum. i. 0{($(getposition inlocalesv widgetlist_disk_'')) do.
+for_objnum. i. 0{($(getid inlocalesv widgetlist_disk_'')) do.
 obj =: objnum { widgetlist_widget_
 oidd =: getid__obj''
 select. oidd
 case. 1 do.
 pos =: getposition__obj''
+vel =: getvelocity__obj''
+newpos =: pos + vel
+setposition__obj newpos
 glbrush glrgb 3#196
 glpen 2 0 [  glrgb 3#128
-glellipse pos,(100,100)
+glellipse newpos
 case. 2 do.
 corns =: getcorners__obj''
 glbrush glrgb (244 89 66)
@@ -315,27 +318,22 @@ glpolygon corns
 end.
 end.
 glpaintx''
+)
+
+
+NB. Run a timestep of length y
+NB. Update positions & velocities
+sys_timer =: verb define
+try.
+timerframe''
 catch.
 smoutput 'timer error'
-timer '0'
+wd 'timer 0'
 end.
 )
-noun define
-if. oidd = 1 do.
-pos =: getposition__obj''
-glbrush glrgb 3#196
-glpen 2 0 [  glrgb 3#128
-glellipse pos,(100,100)
-else. smoutput 'not a circle'
-end.
-if. oidd = 2 do.
-corns =: getcorners__obj''
-glbrush glrgb (244 89 66)
-glpen 2 0 [  glrgb (244 89 66)
-glpolygon corns
-else. smoutput 'not a rect'
-end.
-)
+
+
+
 sys_timer_z_ =: sys_timer_base_
 
 canvas_start_button =: verb define
@@ -346,7 +344,7 @@ canvas_stop_button =: verb define
 wd 'timer 0'
 )
 
-wd 'timer 0'
+
 
 NB. When we load this file, create the form if it doesn't exist
 wd :: canvas_run 'psel canvas'
