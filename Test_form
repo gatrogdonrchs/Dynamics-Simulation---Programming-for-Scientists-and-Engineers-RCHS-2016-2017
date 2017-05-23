@@ -1,18 +1,19 @@
 
+
 canvas_destroyallballs_button ''
 canvas_createball_button ''
 canvas_createball_button ''
 
 disk1 =: 0 { widgetlist_disk_
-setposition__disk1  200 500
-setvelocity__disk1  0 _5
+setposition__disk1  500 200
+setvelocity__disk1  _5 0
 setrotation__disk1  0
 setavelocity__disk1  0
 setmass__disk1  1
 
 disk2 =: 1 { widgetlist_disk_
 setposition__disk2  200 200
-setvelocity__disk2  0 2
+setvelocity__disk2  2 0
 setrotation__disk2  0
 setavelocity__disk2  0
 setmass__disk2  1
@@ -38,7 +39,7 @@ m2 =: getmass__disk2 ''
 dy12 =: y2 - y1
 dx12 =: x1 - x2
 angle12 =: arctan dx12, dy12
-anglev1 =: arctan (1 _1) * v1
+anglev1 =: arctan v1
 
 v1r =: (anglev1 -angle12) shift_forward v1
 v1x =: 0 { ,v1r
@@ -46,7 +47,7 @@ v1y =: 1 { ,v1r
 
 dy21 =: y1 - y2
 dx21 =: x2 - x1
-angle21 =: arctan dx21,  dy21)
+angle21 =: arctan dx21,  dy21
 anglev2 =: anglev1
 
 v2r =: (anglev2 - angle21) shift_forward v2 
@@ -57,9 +58,13 @@ v2y =: 1 { ,v2r
 v1xf =: (((m1 - m2) % (m1 + m2)) * v1x ) + (((2 * m2) % (m1 + m2)) * v2x)
 v2xf =: (((2 * m1) % (m1 + m2)) * v1x ) - (((m1 - m2) % (m1 + m2)) * v2x)
 
-invert =: _1 * angle
-v1f =:  (_1 * anglev1 - angle12) shift_forward v1xf , v1y
-v2f =: (_1 * anglev2 - angle21) shift_forward v2xf , v2y
+angle12f =: arctan v1xf, v1y
+angle21f =: arctan v2xf, v2y
+v1f =:  (anglev1 - angle12f) shift_forward v1xf , v1y
+v2f =:  (anglev2 - angle21f) shift_forward v2xf , v2y
+
+NB.v1f =:  (_1 * anglev1 - angle12) shift_forward v1xf , v1y
+NB.v2f =: (_1 * anglev2 - angle21) shift_forward v2xf , v2y
 
 setvelocity__disk1 ,v1f
 setvelocity__disk2 ,v2f
