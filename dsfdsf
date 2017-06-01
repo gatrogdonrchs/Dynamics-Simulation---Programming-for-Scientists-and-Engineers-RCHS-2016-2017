@@ -114,6 +114,14 @@ radius =: y
 getradius =: verb define
 radius
 )
+setcolor =: verb define
+color =: y
+)
+
+getcolor =: verb define
+color
+)
+
 
 cocurrent 'base'
 
@@ -178,6 +186,15 @@ cc "id:" static;
 cc id edit; set id wh 40 20;
 bin sz;
 bin h;
+cc Color static;
+cc "R:" static;
+cc objr edit;set objr wh 40 20;
+cc "G:" static;
+cc objg edit;set objg wh 40 20;
+cc "B:" static;
+cc objb edit;set objb wh 40 20;
+bin sz;
+bin h;
 cc Create button;set Create wh 50 20;
 )
 NB. Disk properties (ie: color, velocity, position)
@@ -215,6 +232,7 @@ cc "id:" static;
 cc id edit; set id wh 40 20;
 bin sz;
 bin h;
+cc "
 cc Create button;set Create wh 50 20;
 )
 NB. Rectangle properties (ie: color, velocity, position)
@@ -261,9 +279,10 @@ setposition__newball (". newposx),(". newposy)
 setvelocity__newball ((". newvelx)),((". newvely))
 setid__newball (". id)
 NB. we need to set id to 1
+setcolor__newball ((".objr),(".objg),(".objb))
 glsel canvasisi
-glbrush glrgb 3#196
-glpen 2 0 [  glrgb 3#128
+glbrush glrgb (getcolor__newball'')
+glpen 2 0 [  glrgb (getcolor__newball'')
 glellipse (getposition__newball''),((".newposx),(".newposy))
 glpaintx''
 wd'pclose;'
@@ -338,8 +357,9 @@ pos =: getposition__obj''
 nvel =: getvelocity__obj''
 newpos =: pos + nvel
 setposition__obj newpos
-glbrush glrgb 3#196
-glpen 2 0 [  glrgb 3#128
+col =: getcolor__obj''
+glbrush glrgb col
+glpen 2 0 [  glrgb col
 glellipse newpos,((".newsizex),(".newsizey))
 case. 2 do.
 corns =: getcorners__obj''
