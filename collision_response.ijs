@@ -27,7 +27,7 @@ setvelocity__disk2 v2p
 
 )
 NB. none of this is working, just keeping it to show I was working on stuff
-disk_disk1 =: dyad define
+disk_disk2 =: dyad define
 posx =: 0 { x
 posy =: 1 { x
 disk1 =: 0 { y
