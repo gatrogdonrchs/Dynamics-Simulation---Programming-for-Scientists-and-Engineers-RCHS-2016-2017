@@ -166,6 +166,25 @@ smoutput shiftedvelocity
 
 )
 
+
+shift_forward =: dyad define
+
+NB. disk1 =: [wpw1] { widgetlist_widget_
+NB. disk2 =: [wpw2] { widgetlist_widget_
+NB. wpw means position of widget in collision with respect to widgetlist_widget_
+
+
+angle =: x NB. getrotation__rect1''
+vector =: y
+hyp =: %:(+/ (vector^2))
+shiftedvelocity =: (hyp * (2&o.angle)),(hyp * (1&o.angle))
+NB. the shifted coordinate system. 
+
+shiftedvelocity
+
+)
+
+
 arctanpos =: monad define
 exe =: 0 { y
 
