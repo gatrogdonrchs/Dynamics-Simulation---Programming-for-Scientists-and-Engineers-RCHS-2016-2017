@@ -128,10 +128,10 @@ cpos =. position__circ
 
 NB. Defined counter-clockwise
 corners =. corners__rect
-a =. 0{corners
-b =. 1{corners
-c =. 2{corners
-d =. 3{corners
+a =. 0 1{corners
+b =. 2 3{corners
+c =. 4 5{corners
+d =. 6 7{corners
 
 NB. counterclockwise vector rotation is (-y,x)
 
