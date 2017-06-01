@@ -133,6 +133,14 @@ getbcparams =: verb define
 bcparams
 )
 
+setcolor =: verb define
+color =: y
+)
+
+getcolor =: verb define
+color
+)
+
 NB. ******************** disks ******************
 NB. disks are id =: 1
 cocurrent 'disk'
@@ -233,11 +241,12 @@ canvas_createball_button =: verb define
 newball =. '' conew 'disk'
 setposition__newball (". xcord),(". ycord),100,100
 setvelocity__newball ((". xvelo)%50),((". yvelo)%50),0,0
-setid__newball 1
+setid__newball 1 
 setbcparams__newball (getposition__newball'')
+setcolor__newball (".objr, ".objg, ".objb)
 glsel canvasisi
-glbrush glrgb 3#196
-glpen 2 0 [  glrgb 3#128
+glbrush glrgb (getcolor__newball'')
+glpen 2 0 [  glrgb (getcolor__newball'')
 glellipse (getposition__newball'')
 glpaintx''
 
@@ -310,8 +319,9 @@ vel =: getvelocity__obj''
 setvelocity__obj ((vel) +"1 (0 0.196 0 0))
 newpos =: pos + vel
 setposition__obj newpos
-glbrush glrgb 3#196
-glpen 2 0 [  glrgb 3#128
+col =: getcolor__obj''
+glbrush glrgb col
+glpen 2 0 [  glrgb col
 glellipse newpos
 case. 2 do.
 corns =: getcorners__obj''
