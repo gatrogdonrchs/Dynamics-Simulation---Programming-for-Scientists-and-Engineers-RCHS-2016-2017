@@ -26,7 +26,7 @@ setvelocity__disk2 v2p
  
 
 )
-
+NB. none of this is working, just keeping it to show I was working on stuff
 disk_disk1 =: dyad define
 posx =: 0 { x
 posy =: 1 { x
@@ -80,20 +80,27 @@ xy2 =: getposition__disk2 ''
 x2 =: 0 { xy2
 y2 =: 1 { xy2
 v1 =: getvelocity__disk1 ''
-
+v1 =: (1 , _1) * v1 
 v2 =: getvelocity__disk2 ''
-
+v2 =: (1 , _1) * v2
 m1 =: getmass__disk1 ''
 m2 =: getmass__disk2 ''
 
-dy =: y1 - y2
-dx =: x1 - x2
-angle =: _3 o. dy12 % dx12
+dy12 =: y1 - y2
+dx12 =: x2 - x1
+angle12 =: arctanpos dx12, dy12
+anglev1 =: arctanvel v1
 
-v1r =: (((2 o. angle) , (_1 * 1 o. angle)) ,: ((1 o. angle) , (2 o. angle))) +/ .* ,. v1
+v1r =: (anglev1 -angle12) shift_forward v1
 v1x =: 0 { ,v1r
 v1y =: 1 { ,v1r
-v2r =: (((2 o. angle) , (_1 * 1 o. angle)) ,: ((1 o. angle) , (2 o. angle))) +/ .* v2
+
+dy21 =: y2 - y1
+dx21 =: x1 - x2
+angle21 =: arctanpos dx21,  dy21
+anglev2 =: anglev1
+
+v2r =: (anglev2 - angle21) shift_forward v2 
 v2x =: 0 { ,v2r
 v2y =: 1 { ,v2r
 
@@ -101,12 +108,24 @@ v2y =: 1 { ,v2r
 v1xf =: (((m1 - m2) % (m1 + m2)) * v1x ) + (((2 * m2) % (m1 + m2)) * v2x)
 v2xf =: (((2 * m1) % (m1 + m2)) * v1x ) - (((m1 - m2) % (m1 + m2)) * v2x)
 
-invert =: _1 * angle
-v1f =: (((2 o. invert) , (_1 * 1 o. invert)) ,: ((1 o. invert) , (2 o. invert))) +/ .* ,. v1xf , v1y
-v2r =: (((2 o. invert) , (_1 * 1 o. invert)) ,: ((1 o. invert) , (2 o. invert))) +/ .* ,. v2xf , v2y
+anglev1f =: arctanvel v1xf, v1y
+anglev2f =: arctanvel v2xf, v2y
+theta =: 1p1 - angle21
+rotmtrx =: ((2 o. theta) , (_1 * 1 o. theta)) ,. ((1 o. theta) , ( 2 o. theta))
 
-setvelocity__disk1 v1f
-setvelocity__disk2 v2f
+v1f =: rotmtrx +/ . * ,. v1xf , v1y
+v2f =: rotmtrx +/ . * ,. v2xf , v2y
+NB.v1f =:  (anglev1f - theta) shift_forward v1xf , v1y
+NB.v2f =:  (anglev2f - theta) shift_forward v2xf , v2y
+
+NB.v1f =:  (_1 * anglev1 - angle12) shift_forward v1xf , v1y
+NB.v2f =:  (_1 * anglev2 - angle21) shift_forward v2xf , v2y
+
+NB.v1f =:  (_1 * anglev1 - angle12) shift_forward v1xf , v1y
+NB.v2f =: (_1 * anglev2 - angle21) shift_forward v2xf , v2y
+
+setvelocity__disk1 (1 , _1) * ,v1f
+setvelocity__disk2 (1 , _1) * ,v2f
 )
 
 
@@ -146,6 +165,24 @@ smoutput velocity1
 smoutput shiftedvelocity
 
 )
+
+arctanpos =: monad define
+exe =: 0 { y
+
+arc =: _3 o. %~/ * y
+if. (exe < 0) do.
+arc =: arc + 1p1
+end.
+) 
+
+arctanvel =: monad define
+exe =: 0 { y
+
+arc =: _3 o. %~/ (1 1)* y
+if. (exe < 0) do.
+arc =: arc + 1p1
+end.
+) 
 
 coordinate_rotation =: monad define
 
@@ -284,7 +321,7 @@ NB. this literally has the equations we need.  Just rotate the frame, then rotat
 
 
 
-shift_forward =: monad define
+shift_forward1 =: monad define
 
 NB. disk1 =: [wpw1] { widgetlist_widget_
 NB. disk2 =: [wpw2] { widgetlist_widget_
@@ -311,7 +348,7 @@ smoutput shiftedvelocity
 
 )
 
-shift_back =: monad define
+shift_back1 =: monad define
 
 disk1 =: 10
 rect1 =: 0
