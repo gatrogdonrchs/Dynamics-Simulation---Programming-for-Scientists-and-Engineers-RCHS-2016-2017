@@ -56,3 +56,40 @@ NB.v2f =: (_1 * anglev2 - angle21) shift_forward v2xf , v2y
 setvelocity__disk1 (1 , _1) * ,v1f
 setvelocity__disk2 (1 , _1) * ,v2f
 )
+
+
+
+shift_forward =: dyad define
+
+NB. disk1 =: [wpw1] { widgetlist_widget_
+NB. disk2 =: [wpw2] { widgetlist_widget_
+NB. wpw means position of widget in collision with respect to widgetlist_widget_
+
+
+angle =: x NB. getrotation__rect1''
+vector =: y
+hyp =: %:(+/ (vector^2))
+shiftedvelocity =: (hyp * (2&o.angle)),(hyp * (1&o.angle))
+NB. the shifted coordinate system. 
+
+shiftedvelocity
+
+)
+
+arctanpos =: monad define
+exe =: 0 { y
+
+arc =: _3 o. %~/ * y
+if. (exe < 0) do.
+arc =: arc + 1p1
+end.
+) 
+
+arctanvel =: monad define
+exe =: 0 { y
+
+arc =: _3 o. %~/ (1 1)* y
+if. (exe < 0) do.
+arc =: arc + 1p1
+end.
+) 
