@@ -1,13 +1,8 @@
-NB. What the code can do:
-NB. * it can create objects
-NB. * it can simulate a collision based on timers
-NB. * it includes gravity
-
 require 'gl2'
 coinsert 'jgl2'
 NB. Changes these loads according to where ur other info is stored
-load 'C:\Users\Agil\j64-805-user\temp\Game\collision_response.ijs'
-load 'C:\Users\Agil\j64-805-user\temp\Game\collision_detection.ijs'
+load 'C:\Users\hello\OneDrive\Documents\Ball Game\collision_response.ijs'
+load 'C:\Users\hello\OneDrive\Documents\Ball Game\collision_detection.ijs'
 
 NB. Dynamics simulation
 
@@ -294,8 +289,9 @@ newball =. '' conew 'disk'
 setposition__newball (100),(300)
 setvelocity__newball ((4)),((0))
 setid__newball (1)
+setcolor__newball ((196),(196),(196))
 glsel canvasisi
-glbrush glrgb 3#196
+glbrush glrgb (getcolor__newball'')
 glpen 2 0 [  glrgb 3#128
 glellipse (getposition__newball''),((300),(300))
 glpaintx''
@@ -303,11 +299,12 @@ glpaintx''
 
 canvas_default2_button =: monad define
 newball =. '' conew 'disk'
-setposition__newball (500),(700)
-setvelocity__newball ((0)),((-4))
+setposition__newball (500),(300)
+setvelocity__newball ((-4)),((0))
 setid__newball (1)
+setcolor__newball ((196),(196),(196))
 glsel canvasisi
-glbrush glrgb 3#196
+glbrush glrgb (getcolor__newball'')
 glpen 2 0 [  glrgb 3#128
 glellipse (getposition__newball''),((300),(300))
 glpaintx''
@@ -369,6 +366,10 @@ NB. Outline
 glpolygon corns
 end.
 end.
+disk_cd_disk =: cd_disk_disk widgetlist_widget_
+NB.if. (1{disk_cd_disk) = 0 do. 
+NB.disk_disk widgetlist_widget_
+NB.end.
 glpaintx''
 )
 NB. All of this does color 'yeah' -K
