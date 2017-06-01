@@ -2,7 +2,7 @@
 
 
 
-disk_disk =: dyad define
+disk_disk1 =: dyad define
 NB. Dummy code
 NB. Input: 
 NB. x is point of collision, 
@@ -69,7 +69,7 @@ setvelocity__disk1 v1p
 setvelocity__disk2 v2p
 )
 
-disk_disk2 =: monad define
+disk_disk =: monad define
 disk1 =: 0 { y
 disk2 =: 1 { y
 
