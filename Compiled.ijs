@@ -76,7 +76,7 @@ size
 setrotation =: verb define
 rotation =: y
 )
-NB.  Currently does nothing -- Mack is in charge
+NB.  Currently does nothing -- Mac is in charge
 
 setavelocity =: verb define
 avelocity =: y
@@ -168,10 +168,8 @@ pc disk;
 cc Size static;
 bin sz;
 bin h;
-cc "x:" static;
+cc "diameter:" static;
 cc newsizex edit;set newsizex wh 40 20;
-cc "y:" static;
-cc newsizey edit;set newsizey wh 40 20;
 bin sz;
 bin h;
 cc Position static;
@@ -368,7 +366,7 @@ setposition__obj newpos
 col =: getcolor__obj''
 glbrush glrgb col
 glpen 2 0 [  glrgb col
-glellipse newpos,((".newsizex),(".newsizey))
+glellipse newpos,((".newsizex),(".newsizex))
 case. 2 do.
 corns =: getcorners__obj''
 glbrush glrgb (244 89 66)
