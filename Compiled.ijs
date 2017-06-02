@@ -3,7 +3,8 @@ coinsert 'jgl2'
 NB. Changes these loads according to where ur other info is stored
 load 'C:\Users\hello\OneDrive\Documents\Ball Game\collision_response.ijs'
 load 'C:\Users\hello\OneDrive\Documents\Ball Game\collision_detection.ijs'
-
+NB. load jpath 'phys\collision_response.ijs'
+NB. load jpath 'phys\collision_detection.ijs'
 NB. Dynamics simulation
 
 NB. Calculate length of next time step
