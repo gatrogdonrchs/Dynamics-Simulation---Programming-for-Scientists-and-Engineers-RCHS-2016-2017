@@ -103,9 +103,9 @@ NB. The distance between the center of the disk at
 NB.  the time of the calculation and the center of 
 NB.  the disk at the time of collision
 dist =. d - h 
-
+magdist =. %: (*: {. dist) + (*: {: dist)
 NB. The time until the collision
-settime =. dist % magv0
+settime =. magdist % magv0
 
 collisiontype =. <0
 
