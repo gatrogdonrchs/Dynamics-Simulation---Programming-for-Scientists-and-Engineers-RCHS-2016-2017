@@ -42,7 +42,10 @@ dx12 =: x2 - x1
 angle12 =: arctanpos dx12, dy12
 anglev1 =: arctanvel v1
 
-v1r =: (anglev1 -angle12) shift_forward v1
+NB.v1r =: (anglev1 -angle12) shift_forward v1
+theta1 =: angle12
+rotmtrx1 =: ((2 o. theta1) , (_1 * 1 o. theta1)) ,. ((1 o. theta1) , ( 2 o. theta1))
+v1r =: rotmtrx1 +/ . * v1
 v1x =: 0 { ,v1r
 v1y =: 1 { ,v1r
 
@@ -51,7 +54,8 @@ dx21 =: x1 - x2
 angle21 =: arctanpos dx21,  dy21
 anglev2 =: anglev1
 
-v2r =: (anglev2 - angle21) shift_forward v2 
+NB.v2r =: (anglev2 - angle21) shift_forward v2 
+v2r =: rotmtrx1 +/ . * v2
 v2x =: 0 { ,v2r
 v2y =: 1 { ,v2r
 
@@ -61,11 +65,11 @@ v2xf =: (((2 * m1) % (m1 + m2)) * v1x ) - (((m1 - m2) % (m1 + m2)) * v2x)
 
 anglev1f =: arctanvel v1xf, v1y
 anglev2f =: arctanvel v2xf, v2y
-theta =: 1p1 - angle21
-rotmtrx =: ((2 o. theta) , (_1 * 1 o. theta)) ,. ((1 o. theta) , ( 2 o. theta))
+theta2 =: 1p1 - angle21
+rotmtrx2 =: ((2 o. theta2) , (_1 * 1 o. theta2)) ,. ((1 o. theta2) , ( 2 o. theta2))
 
-v1f =: rotmtrx +/ . * ,. v1xf , v1y
-v2f =: rotmtrx +/ . * ,. v2xf , v2y
+v1f =: rotmtrx2 +/ . * ,. v1xf , v1y
+v2f =: rotmtrx2 +/ . * ,. v2xf , v2y
 NB.v1f =:  (anglev1f - theta) shift_forward v1xf , v1y
 NB.v2f =:  (anglev2f - theta) shift_forward v2xf , v2y
 
