@@ -25,8 +25,8 @@ veldiff =. | vel1 - vel0
 speed =. %: (*: {.veldiff) + (*: {:veldiff)
 
 
-bpos0 =. 0 1 { position__obj0
-bpos1 =. 0 1 { position__obj1
+bpos0 =. 0 1 { bound__obj0
+bpos1 =. 0 1 { bound__obj1
 
 xs =. {. bpos0,.bpos1
 ys =. {: bpos0,.bpos1
