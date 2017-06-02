@@ -105,7 +105,7 @@ NB.  the disk at the time of collision
 dist =. d - h 
 
 NB. The time until the collision
-settime =. dist % v0
+settime =. dist % magv0
 
 collisiontype =. <0
 
