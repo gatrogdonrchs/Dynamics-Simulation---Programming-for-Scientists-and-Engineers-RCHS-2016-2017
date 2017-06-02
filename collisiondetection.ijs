@@ -47,8 +47,8 @@ else. if. (div < 20) do.
 NB. Calls the correct cd verb based on the widget types
 
 nametable =. (<' '),(<'disk'),(<'rectangle')
-name0 =. id__obj0 { nametable
-name1 =. id__obj1 { nametable
+name0 =.> id__obj0 { nametable
+name1 =.> id__obj1 { nametable
 ('cd',name0,name1)~ obj0,obj1
 else. ''
 end.
