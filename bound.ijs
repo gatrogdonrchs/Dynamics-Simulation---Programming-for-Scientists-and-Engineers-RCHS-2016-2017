@@ -4,7 +4,7 @@ NB.  the corners of the rectangle.
 NB. Inputs: corners of rectangle
 NB. Outputs: center and radius, each boxed then comma'ed together
 
-bound =: monad define
+findbound =: monad define
 NB. The points put into a better format, a 2 column table
 pts =. ((c%2),2) $ y
 
