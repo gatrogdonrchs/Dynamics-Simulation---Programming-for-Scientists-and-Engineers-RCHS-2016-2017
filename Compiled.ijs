@@ -346,32 +346,57 @@ wd 'pclose;'
 )
 
 rect_cancel =: rect_close
-NB. Run a timestep of length y
-NB. Update positions & velocities
-NB. runstep =: verb define
+
+
+
+
+NB. timerframe - what runs every frame
 timerframe =: verb define
+NB. select and prepare canvas for new positions
 glsel canvasisi
 glclear''
+NB. starts a for_ loop with i.(# of objects) defined as objnum
+NB. now the following for loop will run once per number of objects
 for_objnum. i. 0{($(getid inlocalesv widgetlist_disk_'')) do.
+NB. obj is the object that the current iteration of the loop is running for
 obj =: objnum { widgetlist_widget_
+NB. oidd is the id of the object (1 for disk, 2 for wall)
 oidd =: getid__obj''
+NB. select chooses oidd and looks at the cases 1 and 2 and operates
+NB. the respective block of code
 select. oidd
+
+
+NB. for disks
 case. 1 do.
+NB. first setvelocity adds gravity
 vel =: getvelocity__obj''
 setvelocity__obj ((vel) +"1 (0 0.196))
+NB. newpos adds the newly calculated velocity to the original position
+NB. giving the final position of the disk for this frame
 pos =: getposition__obj''
 nvel =: getvelocity__obj''
 newpos =: pos + nvel
+NB. sets the position so that next iteration has the updated position 
+NB. to add to
 setposition__obj newpos
+NB. grabs color from the method that is defined in the createball verb
 col =: getcolor__obj''
+NB. uses gl package to ready up all the graphics
 glbrush glrgb col
 glpen 2 0 [  glrgb col
-glellipse newpos,((".newsizex),(".newsizex))
+glellipse newpos,((".newsizex),(".newsizey))
+NB. once the disk reaches the end of this case, the for_ loops runs again
+NB. for the next object
+
+
+NB. for walls
 case. 2 do.
+NB. grabs the corners
 corns =: getcorners__obj''
+NB. all walls are red
 glbrush glrgb (244 89 66)
 glpen 2 0 [  glrgb (244 89 66)
-NB. Outline
 glpolygon corns
 end.
 end.
@@ -381,7 +406,9 @@ NB.disk_disk widgetlist_widget_
 NB.end.
 glpaintx''
 )
-NB. All of this does color 'yeah' -K
+
+
+
 
 sys_timer =: verb define
 try.
