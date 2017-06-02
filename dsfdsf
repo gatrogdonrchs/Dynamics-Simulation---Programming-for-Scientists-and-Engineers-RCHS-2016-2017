@@ -367,9 +367,9 @@ glpolygon corns
 end.
 end.
 disk_cd_disk =: cd_disk_disk widgetlist_widget_
-NB.if. (1{disk_cd_disk) = 0 do. 
-NB.disk_disk widgetlist_widget_
-NB.end.
+if. 0 { leaf (0{disk_cd_disk) = 0 do. 
+disk_disk widgetlist_widget_
+end.
 glpaintx''
 )
 NB. All of this does color 'yeah' -K
