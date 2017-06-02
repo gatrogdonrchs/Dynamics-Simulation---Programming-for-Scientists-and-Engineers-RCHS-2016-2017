@@ -71,6 +71,8 @@ setvelocity__disk2 v2p
 )
 
 NB. 'working' collision - Thomas, Isaac worked on parts of it, mostly the early attempts to rotate the frame
+NB. I spent a lot of time trying to make the second part work, and also finding the calculation.  That stuff is not really in the code,
+NB. because it was bad and did not work
 disk_disk =: monad define
 disk1 =. 0 { y
 disk2 =. 1 { y
