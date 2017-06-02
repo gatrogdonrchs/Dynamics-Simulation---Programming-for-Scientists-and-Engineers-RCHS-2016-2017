@@ -1,7 +1,7 @@
 
 
 
-
+NB. Dummy Code- Thomas
 disk_disk1 =: dyad define
 NB. Dummy code
 NB. Input: 
@@ -26,6 +26,7 @@ setvelocity__disk2 v2p
  
 
 )
+NB. attempt 1 - Thomas
 NB. none of this is working, just keeping it to show I was working on stuff
 disk_disk2 =: dyad define
 posx =: 0 { x
@@ -69,67 +70,72 @@ setvelocity__disk1 v1p
 setvelocity__disk2 v2p
 )
 
+NB. 'working' collision - Thomas, Isaac worked on parts of it, mostly the early attempts to rotate the frame
 disk_disk =: monad define
-disk1 =: 0 { y
-disk2 =: 1 { y
+disk1 =. 0 { y
+disk2 =. 1 { y
 
-NB. calls all the values from the two colliding disks.  1 denotes the first disk, 2 denotes the second
 xy1 =: getposition__disk1 ''
 x1 =: 0 { xy1
 y1 =: 1 { xy1
 xy2 =: getposition__disk2 ''
 x2 =: 0 { xy2
 y2 =: 1 { xy2
-v1 =: getvelocity__disk1 ''
-NB. multiplies y by negative one to simplify the code later, because it makes problems with arctan
+v1 =: (getvelocity__disk1 '')NB.*(100%6)
 v1 =: (1 , _1) * v1 
-v2 =: getvelocity__disk2 ''
+v2 =: (getvelocity__disk2 '')NB.*(100%6)
 v2 =: (1 , _1) * v2
-m1 =: getmass__disk1 ''
-m2 =: getmass__disk2 ''
-
-NB. calculates the angle from the x axis to the center of disk2
-NB. this is more of less the angle that the coordinate system will be rotated by, in my own special complicated way
+m1 =: 1
+m2 =: 1
+NB.getmass__disk1 '' getmass__disk2 ''
 dy12 =: y1 - y2
 dx12 =: x2 - x1
 angle12 =: arctanpos dx12, dy12
-NB. the angle from the x axis to the velocity vector of disk1
 anglev1 =: arctanvel v1
-NB. the rotated velocity, along the x axis drawn from disk1 to disk2
-v1r =: (anglev1 -angle12) shift_forward v1
+
+NB.v1r =: (anglev1 -angle12) shift_forward v1
+theta1 =: angle12
+rotmtrx1 =: ((2 o. theta1) , (_1 * 1 o. theta1)) ,. ((1 o. theta1) , ( 2 o. theta1))
+v1r =: rotmtrx1 +/ . * v1
 v1x =: 0 { ,v1r
 v1y =: 1 { ,v1r
-NB. repeats the calculation, but now the angle from disk2 to disk 1
+
 dy21 =: y2 - y1
 dx21 =: x1 - x2
 angle21 =: arctanpos dx21,  dy21
 anglev2 =: anglev1
 
-NB. again, finds the component along the line from disk1 to disk2
-v2r =: (anglev2 - angle21) shift_forward v2 
+NB.v2r =: (anglev2 - angle21) shift_forward v2 
+v2r =: rotmtrx1 +/ . * v2
 v2x =: 0 { ,v2r
 v2y =: 1 { ,v2r
 
-NB. the calculation.  assumes the collision is 1d, and colliding along the new rotated x-axis.  The rotated y values are not affected
-NB. these formulas are simplified from momentum and conservation of energy
+
 v1xf =: (((m1 - m2) % (m1 + m2)) * v1x ) + (((2 * m2) % (m1 + m2)) * v2x)
 v2xf =: (((2 * m1) % (m1 + m2)) * v1x ) - (((m1 - m2) % (m1 + m2)) * v2x)
 
-NB. rotates the coordinates back to the original x and y.  uses a rotation matrix
-theta =: 1p1 - angle21
-rotmtrx =: ((2 o. theta) , (_1 * 1 o. theta)) ,. ((1 o. theta) , ( 2 o. theta))
+anglev1f =: arctanvel v1xf, v1y
+anglev2f =: arctanvel v2xf, v2y
+theta2 =: 1p1 - angle21
+rotmtrx2 =: ((2 o. theta2) , (_1 * 1 o. theta2)) ,. ((1 o. theta2) , ( 2 o. theta2))
 
-NB. the actual rotation
-v1f =: rotmtrx +/ . * ,. v1xf , v1y
-v2f =: rotmtrx +/ . * ,. v2xf , v2y
+v1f =: rotmtrx2 +/ . * ,. v1xf , v1y
+v2f =: rotmtrx2 +/ . * ,. v2xf , v2y
+NB.v1f =:  (anglev1f - theta) shift_forward v1xf , v1y
+NB.v2f =:  (anglev2f - theta) shift_forward v2xf , v2y
 
-NB. set the new velocities.  Multiplied y by negative one to get it going in the correct direction
+NB.v1f =:  (_1 * anglev1 - angle12) shift_forward v1xf , v1y
+NB.v2f =:  (_1 * anglev2 - angle21) shift_forward v2xf , v2y
+
+NB.v1f =:  (_1 * anglev1 - angle12) shift_forward v1xf , v1y
+NB.v2f =: (_1 * anglev2 - angle21) shift_forward v2xf , v2y
+
 setvelocity__disk1 (1 , _1) * ,v1f
 setvelocity__disk2 (1 , _1) * ,v2f
 )
 
 
-
+NB. Static rect with no rotations - Isaac
 disk_rect =: monad define
 
 NB. disk1 =: [wpw1] { widgetlist_widget_
@@ -166,7 +172,7 @@ smoutput shiftedvelocity
 
 )
 
-
+NB. early attempt to rotate frame - Isaac
 shift_forward =: dyad define
 
 NB. disk1 =: [wpw1] { widgetlist_widget_
@@ -184,7 +190,7 @@ shiftedvelocity
 
 )
 
-
+NB. tan verbs, they are basically the same.  The vel used to correct negatives, but I did that elsewhere - Thomas
 arctanpos =: monad define
 exe =: 0 { y
 
@@ -203,6 +209,7 @@ arc =: arc + 1p1
 end.
 ) 
 
+NB. wall collision frame rotations - Isaac
 coordinate_rotation =: monad define
 
 disk1 =: 0 { widgetlist_widget_
@@ -234,7 +241,8 @@ smoutput velocity1
 smoutput shiftedvelocity
 )
 
-
+NB. The never tested wall-disk collisions.  Used code from Isaacs non-rotating ball code, and lots of his frame rotations
+NB. I kind of doubt this works, after having so much trouble with the disk_disk collision frame rotations
 disk_wall =: monad define
 NB. input is disk locale, wall locale
 
@@ -339,7 +347,7 @@ NB. http://farside.ph.utexas.edu/teaching/301/lectures/node76.html
 NB. this literally has the equations we need.  Just rotate the frame, then rotate back
 
 
-
+Nb. Isaac, the original frame rotation verb.  You may be sensing a theme, because there are a lot of not working rotation verbs
 shift_forward1 =: monad define
 
 NB. disk1 =: [wpw1] { widgetlist_widget_
