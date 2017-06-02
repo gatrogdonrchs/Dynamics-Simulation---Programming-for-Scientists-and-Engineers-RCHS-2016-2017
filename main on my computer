@@ -298,7 +298,7 @@ NB. not really used--except disk create button
 canvas_default1_button =: monad define
 newball =. '' conew 'disk'
 setposition__newball (100),(100)
-setvelocity__newball ((6)),((0))
+setvelocity__newball ((0)),((0))
 setid__newball (1)
 setcolor__newball ((196),(196),(196))
 glsel canvasisi
@@ -310,8 +310,8 @@ glpaintx''
 
 canvas_default2_button =: monad define
 newball =. '' conew 'disk'
-setposition__newball (900),(100)
-setvelocity__newball ((-6)),((0))
+setposition__newball (100),(600)
+setvelocity__newball ((0)),((-6))
 setid__newball (1)
 setcolor__newball ((196),(196),(196))
 glsel canvasisi
@@ -384,7 +384,10 @@ end.
 smoutput disk_cd_disk
 glpaintx''
 
-
+NB. while. (1,4) = $ disk_cd_disk do.
+NB. tbcf =: > {. 0 { disk_cd_disk
+NB. cvels =: getvelocity inlocalesv c''
+NB. zxend.
 )
 NB. All of this does color 'yeah' -K
 
@@ -392,7 +395,7 @@ sys_timer =: verb define
 try.
 timerframe''
 catch.
-smoutput 'please keerthik'
+smoutput '¯\_(ツ)_/¯'
 wd 'timer 0'
 end.
 NB.ttcoll =: > {. (cd_disk_disk widgetlist_widget_)
