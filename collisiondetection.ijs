@@ -39,7 +39,7 @@ dist =. %: distsq
 div =. dist % speed
 
 NB. If both objects are stationary, don't bother operating on them.
-if. (vel0 +. vel1) ~: 0 do. 
+if. (vel0 +. vel1) = 0 0  do. 
 ''
 NB. The 20 is the frame time, change if needed.
 else. if. (div < 20) do.
