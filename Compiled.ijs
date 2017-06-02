@@ -1,8 +1,14 @@
+NB. What the code can do:
+NB. * it can create objects
+NB. * it can simulate a collision based on timers
+NB. * it includes gravity
+
 require 'gl2'
 coinsert 'jgl2'
 NB. Changes these loads according to where ur other info is stored
-load 'C:\Users\hello\OneDrive\Documents\Ball Game\collision_response.ijs'
-load 'C:\Users\hello\OneDrive\Documents\Ball Game\collision_detection.ijs'
+load 'C:\Users\Agil\j64-805-user\temp\Game\collision_response.ijs'
+load 'C:\Users\Agil\j64-805-user\temp\Game\collision_detection.ijs'
+
 NB. load jpath 'phys\collision_response.ijs'
 NB. load jpath 'phys\collision_detection.ijs'
 NB. Dynamics simulation
@@ -85,9 +91,13 @@ getid =: verb define
 id
 )
 setmass =: verb define
-amass =: y
+mass =: y
 )
-NB. Mass is used for the alls
+
+getmass =: verb define
+mass
+)
+NB. Mass is used for the balls
 
 setgraphrep =: verb define
 )
@@ -367,10 +377,10 @@ NB. Outline
 glpolygon corns
 end.
 end.
-disk_cd_disk =: cd_disk_disk widgetlist_widget_
-if. 0 { leaf (0{disk_cd_disk) = 0 do. 
-disk_disk widgetlist_widget_
-end.
+NB.disk_cd_disk =: cd_disk_disk widgetlist_widget_
+NB.if. 0 { leaf (0{disk_cd_disk) = 0 do. 
+NB.disk_disk widgetlist_widget_
+NB.end.
 glpaintx''
 )
 NB. All of this does color 'yeah' -K
