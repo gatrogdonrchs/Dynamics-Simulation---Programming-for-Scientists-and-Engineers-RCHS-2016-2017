@@ -95,9 +95,10 @@ avec =. rvec + (d * veldiv)
 
 NB. The negative A vector
 evec =. -avec
+magevec =. %: (*: {. evec) + (*: {: evec)
 NB. The distance between the end of d near the COP and
 NB.  the center of the disk at the time of collision
-h =. %: (*: rad0) - (*: evec)
+h =. %: (*: rad0) - (*: magevec)
 
 NB. The distance between the center of the disk at
 NB.  the time of the calculation and the center of 
