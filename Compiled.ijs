@@ -1,8 +1,8 @@
 require 'gl2'
 coinsert 'jgl2'
 NB. Changes these loads according to where ur other info is stored
-load 'C:\Users\Agil\j64-805-user\temp\Game\collision_response.ijs'
-load 'C:\Users\Agil\j64-805-user\temp\Game\collision_detection.ijs'
+load 'C:\Users\hello\OneDrive\Documents\Ball Game\collision_response.ijs'
+load 'C:\Users\hello\OneDrive\Documents\Ball Game\collision_detection.ijs'
 
 NB. Dynamics simulation
 
@@ -19,6 +19,7 @@ NB. It has a graphical representation and a mathematical representation
 NB. Subclasses of widgets are disks, rectangles, etc.
 
 cocurrent 'widget'
+NB. sets the locale
 widgetlist =: 0$a:
 
 create =: verb define
@@ -29,8 +30,10 @@ destroy =: verb define
 widgetlist_widget_ =: widgetlist_widget_ -. coname''
 codestroy''
 )
+NB. Create and destroy are methods to create and destroy
 
-NB. Methods common to all widgets
+NB. The following are methods common to all widgets:
+NB. And are self descriptive
 setname =: verb define
 name =: y
 )
@@ -66,6 +69,7 @@ size
 setrotation =: verb define
 rotation =: y
 )
+NB.  Currently does nothing -- Mack is in charge
 
 setavelocity =: verb define
 avelocity =: y
@@ -74,6 +78,7 @@ avelocity =: y
 setid =: verb define
 id =: y
 )
+NB. ID identifies what kind of object it is
 
 getid =: verb define
 id
@@ -81,6 +86,7 @@ id
 setmass =: verb define
 amass =: y
 )
+NB. Mass is used for the alls
 
 setgraphrep =: verb define
 )
@@ -103,8 +109,18 @@ radius =: y
 getradius =: verb define
 radius
 )
+setcolor =: verb define
+color =: y
+)
+
+getcolor =: verb define
+color
+)
+
 
 cocurrent 'base'
+
+NB. Widget, disk, and base are the three locales
 
 NB._____________FORM_GOODIEs______________
 CANVAS =: 0 : 0
@@ -126,6 +142,15 @@ cc createrect button;
 bin sz;
 bin h;
 )
+NB. sets the canvas and the buttons
+NB. Start button: starts the timer
+NB. Step Button: doesn't do anything...
+NB. Positioon: sets the coordinates
+NB. Destroyallballs: destroys the balls and allows for restart
+NB. Default buttons: they create balls w/out need to imput stats
+NB. Testbounce button: reverses direction, right now
+NB. createrect button: creates a rectangle (not tested)
+NB. ll: stops all
 
 CREATEDISK =: 0 : 0
 pc disk;
@@ -156,8 +181,22 @@ cc "id:" static;
 cc id edit; set id wh 40 20;
 bin sz;
 bin h;
+cc Color static;
+cc "R:" static;
+cc objr edit;set objr wh 40 20;
+cc "G:" static;
+cc objg edit;set objg wh 40 20;
+cc "B:" static;
+cc objb edit;set objb wh 40 20;
+bin sz;
+bin h;
 cc Create button;set Create wh 50 20;
 )
+NB. Disk properties (ie: color, velocity, position)
+NB.cc "objr" edit ; set objb  wh 40 20;
+NB.cc "objg" edit ; set objb  wh 40 20;
+NB. cc "objb" edit ; set objb  wh 40 20;
+
 CREATERECT =: 0 : 0
 pc rect;
 cc "x:" static;
@@ -188,9 +227,10 @@ cc "id:" static;
 cc id edit; set id wh 40 20;
 bin sz;
 bin h;
+cc "
 cc Create button;set Create wh 50 20;
 )
-
+NB. Rectangle properties (ie: color, velocity, position)
 
 canvas_canvasisi_mmove =: monad define
 
@@ -201,7 +241,9 @@ positioon =: mousex,mousey
 wd'set positioon text "(',(":positioon),')";'
 
 )
+NB. Position and finds coordinates of the cursor
 
+NB. ___________The following is widget stuff_________________
 
 canvas_widgsel_select =: monad define
 if. widgsel -: 'Create Disk' do.
@@ -216,11 +258,13 @@ wd 'pshow'
 end.
 )
 
+
 additems =: monad define
 wd 'psel canvas'
 items =: wd 'get widgsel allitems'
 wd 'set widgsel items ',(items),y
 )
+
 
 widgettable =: 0$a: 
 
@@ -229,21 +273,25 @@ newball =. '' conew 'disk'
 setposition__newball (". newposx),(". newposy)
 setvelocity__newball ((". newvelx)),((". newvely))
 setid__newball (". id)
+NB. we need to set id to 1
+setcolor__newball ((".objr),(".objg),(".objb))
 glsel canvasisi
-glbrush glrgb 3#196
-glpen 2 0 [  glrgb 3#128
+glbrush glrgb (getcolor__newball'')
+glpen 2 0 [  glrgb (getcolor__newball'')
 glellipse (getposition__newball''),((".newposx),(".newposy))
 glpaintx''
 wd'pclose;'
 )
+NB. not really used--except disk create button
 
 canvas_default1_button =: monad define
 newball =. '' conew 'disk'
 setposition__newball (100),(300)
 setvelocity__newball ((4)),((0))
 setid__newball (1)
+setcolor__newball ((196),(196),(196))
 glsel canvasisi
-glbrush glrgb 3#196
+glbrush glrgb (getcolor__newball'')
 glpen 2 0 [  glrgb 3#128
 glellipse (getposition__newball''),((300),(300))
 glpaintx''
@@ -251,15 +299,17 @@ glpaintx''
 
 canvas_default2_button =: monad define
 newball =. '' conew 'disk'
-setposition__newball (500),(700)
-setvelocity__newball ((0)),((-4))
+setposition__newball (500),(300)
+setvelocity__newball ((-4)),((0))
 setid__newball (1)
+setcolor__newball ((196),(196),(196))
 glsel canvasisi
-glbrush glrgb 3#196
+glbrush glrgb (getcolor__newball'')
 glpen 2 0 [  glrgb 3#128
 glellipse (getposition__newball''),((300),(300))
 glpaintx''
 )
+NB. Default buttons create balls without having to input stats
 
 NB. Execute the form
 canvas_run =: monad define
@@ -273,12 +323,14 @@ wd'pclose;'
 )
 
 canvas_cancel =: canvas_close
+NB. Closes the canvas
 
 disk_close =: monad define
 wd 'pclose;'
 )
 
 disk_cancel =: disk_close
+NB. Getting rid of disk
 
 rect_close =: monad define
 wd 'pclose;'
@@ -302,18 +354,25 @@ pos =: getposition__obj''
 nvel =: getvelocity__obj''
 newpos =: pos + nvel
 setposition__obj newpos
-glbrush glrgb 3#196
-glpen 2 0 [  glrgb 3#128
+col =: getcolor__obj''
+glbrush glrgb col
+glpen 2 0 [  glrgb col
 glellipse newpos,((".newsizex),(".newsizey))
 case. 2 do.
 corns =: getcorners__obj''
 glbrush glrgb (244 89 66)
 glpen 2 0 [  glrgb (244 89 66)
+NB. Outline
 glpolygon corns
 end.
 end.
+disk_cd_disk =: cd_disk_disk widgetlist_widget_
+if. 0 { leaf (0{disk_cd_disk) = 0 do. 
+disk_disk widgetlist_widget_
+end.
 glpaintx''
 )
+NB. All of this does color 'yeah' -K
 
 sys_timer =: verb define
 try.
@@ -327,10 +386,11 @@ NB.if. ttcoll = 0  do.
 NB.disk_disk widgetlist_widget_
 NB.end.
 )
+NB. All of this has to do with the pre-set collision 
 
 sys_timer_z_ =: sys_timer_base_
 
-NB.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+NB.~~~~~~~~~~~~~~~~~~~~~~~~Rectangle~~~~~~~~~~~~~~~~~~~~~~~~
 canvas_createrect_button =: verb define
 
 wall1 =: '' conew 'poly'
@@ -380,6 +440,7 @@ wd 'timer 0'
 )
 
 inlocalesc =: 2 : 0
+NB. Mr. Rich's code
 cocurrent =. 18!:4
 i =. 18!:5 ''
 for_l. n do.
@@ -400,9 +461,11 @@ end.
 cocurrent i
 ''
 )
+NB. Cocurrent changes the locale
 
 NB. Execute u in locales n, returning list of results
 inlocalesv =: 2 : 0
+NB. Mr. Rich's code
 if. 0=#n do. '' return. end.
 cocurrent =. 18!:4
 i =. 18!:5 ''
@@ -435,10 +498,14 @@ destroy inlocalesv widgetlist_widget_''
 glsel canvasisi
 glclear''
 )
+NB. this destroys the balls
+
 NB.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 canvas_testbounce_button =: monad define
 disk_disk widgetlist_widget_
 )
+NB. This doesn't work as much anymore because of gravity
+
 NB.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 canvas_start_button =: verb define
